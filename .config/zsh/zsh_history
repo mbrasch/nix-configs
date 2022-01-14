@@ -1,4 +1,1 @@
-: 1642111222:0;darwin-rebuild switch --flake .#mbrasch
-: 1642115899:0;rm -r /Users/mbrasch/Library/Caches/Homebrew/downloads/ae21e73628f6ba99daa5494c6f763ef7dcae24bbf953c33bf21ef1f082eecbad--Dash.zip
-: 1642115979:0;darwin-rebuild switch --flake .#mbrasch
-: 1642199492:0;darwin-rebuild switch --flake github:mbrasch/nix-configuration#mbrasch
+: 1642201923:0;darwin-rebuild switch --flake .#mbrasch

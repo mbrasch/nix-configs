@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 {
-  imports = [ ../00-config/shared.nix ];
+  imports = [ ../config/shared.nix ];
 
   nix = { trustedUsers = [ "@admin" ]; };
 

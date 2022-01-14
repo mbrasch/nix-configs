@@ -1,30 +1,28 @@
-{ pkgs, lib, ... }:
-{
-  home.packages = with pkgs; [
-    pure-prompt
-  ];
+{ pkgs, lib, ... }: {
+  home.packages = with pkgs; [ pure-prompt ];
 
   programs.zsh = {
     enable = true;
-    dotDir = ".config/zsh";
+    dotDir = "${HOME}.config/zsh";
     enableCompletion = true;
     enableAutosuggestions = true;
     autocd = true;
 
     history = {
-      path = ".config/zsh/zsh_history";
-      expireDuplicatesFirst = true;     # Expire duplicates first.
-      extended = true;                  # Save timestamp into the history file.
-      ignoreDups = true;                # Do not enter command lines into the history list if they are duplicates of the previous event.
-      ignoreSpace = true;               # Do not enter command lines into the history list if the first character is a space.
-      share = true;                     # Share command history between zsh sessions.
-      save = 10000;                     # Number of history lines to save.
-      size = 10000;                     # Number of history lines to keep.
+      path = "${HOME}.config/zsh/zsh_history";
+      expireDuplicatesFirst = true; # Expire duplicates first.
+      extended = true; # Save timestamp into the history file.
+      ignoreDups =
+        true; # Do not enter command lines into the history list if they are duplicates of the previous event.
+      ignoreSpace =
+        true; # Do not enter command lines into the history list if the first character is a space.
+      share = true; # Share command history between zsh sessions.
+      save = 10000; # Number of history lines to save.
+      size = 10000; # Number of history lines to keep.
     };
 
     # Extra commands that should be added to .zshenv.
-    envExtra = ''
-    '';
+    envExtra = "";
 
     # Extra commands that should be added to .zshrc.
     initExtra = ''
@@ -33,21 +31,16 @@
     '';
 
     # Extra commands that should be added to .zshrc before compinit.
-    initExtraBeforeCompInit = ''
-    '';
+    initExtraBeforeCompInit = "";
 
     # Extra commands that should be added to .zlogin.
-    loginExtra = ''
-    '';
+    loginExtra = "";
 
     # Extra commands that should be added to .zlogout.
-    logoutExtra = ''
-    '';
+    logoutExtra = "";
 
     # Extra local variables defined at the top of .zshrc.
-    localVariables = {
-      testvar = "foobar";
-    };
+    localVariables = { testvar = "foobar"; };
 
     # Environment variables that will be set for zsh session.
     sessionVariables = {
@@ -67,24 +60,37 @@
     #  G = "| grep";
     #};
 
-    plugins = [];                       # Plugins to source in .zshrc
+    plugins = [ ]; # Plugins to source in .zshrc
 
     oh-my-zsh = {
       enable = true;
       theme = "gnzh";
 
       # Path to a custom oh-my-zsh package to override config of oh-my-zsh.
-      custom = ''
-      '';
+      custom = "";
 
       # Extra settings for plugins.
-      extraConfig = ''
-      '';
+      extraConfig = "";
 
       plugins = [
-        "adb" "git" "sudo" "ansible" "vagrant" "vagrant-prompt" "terraform" "cp"
-        "docker" "docker-compose" "docker-machine" "fzf" "man" "pj" "ripgrep" "ssh-agent"
-        "zsh-interactive-cd" "timer"
+        "adb"
+        "git"
+        "sudo"
+        "ansible"
+        "vagrant"
+        "vagrant-prompt"
+        "terraform"
+        "cp"
+        "docker"
+        "docker-compose"
+        "docker-machine"
+        "fzf"
+        "man"
+        "pj"
+        "ripgrep"
+        "ssh-agent"
+        "zsh-interactive-cd"
+        "timer"
       ];
     };
   };

@@ -22,7 +22,8 @@
   outputs = { self, nixpkgs, darwin, home-manager, flake-utils, ... }@inputs:
     let
       inherit (darwin.lib) darwinSystem;
-      inherit (inputs.nixpkgs-unstable.lib) attrValues makeOverridable optionalAttrs singleton;
+      inherit (inputs.nixpkgs-unstable.lib)
+        attrValues makeOverridable optionalAttrs singleton;
 
       systems = [ "x86_64-darwin" "x86_64-linux" ];
       forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system);
@@ -34,25 +35,27 @@
 
       # Home Manager configuration shared between all different configurations.
       homeManagerStateVersion = "22.05";
-      homeManagerCommonConfig = { user, userConfig ? ./20-home + "/users/${user}.nix", ... }: {
-        imports = attrValues self.homeManagerModules ++ [
-          userConfig
-          ./20-home
-          { home.stateVersion = homeManagerStateVersion; }
-        ];
-      };
+      homeManagerCommonConfig =
+        { user, userConfig ? ./home + "/users/${user}.nix", ... }: {
+          imports = attrValues self.homeManagerModules ++ [
+            userConfig
+            ./home
+            { home.stateVersion = homeManagerStateVersion; }
+          ];
+        };
 
-      nixDarwinCommonModules = args@{ user, host, hostConfig ? ./10-darwin/hosts + "/${host}.nix", ... }: [
-        home-manager.darwinModules.home-manager
-        ./10-darwin
-        hostConfig
-        rec {
-          nixpkgs = nixpkgsConfig;
-          users.users.${user}.home = "/Users/${user}";
-          home-manager.useGlobalPkgs = true;
-          home-manager.users.${user} = homeManagerCommonConfig args;
-        }
-      ];
+      nixDarwinCommonModules = args@{ user, host
+        , hostConfig ? ./darwin/hosts + "/${host}.nix", ... }: [
+          home-manager.darwinModules.home-manager
+          ./10-darwin
+          hostConfig
+          rec {
+            nixpkgs = nixpkgsConfig;
+            users.users.${user}.home = "/Users/${user}";
+            home-manager.useGlobalPkgs = true;
+            home-manager.users.${user} = homeManagerCommonConfig args;
+          }
+        ];
 
     in {
       darwinConfigurations = {
@@ -60,7 +63,7 @@
         # Minimal configuration to bootstrap systems
         bootstrap = makeOverridable darwinSystem {
           system = "x86_64-darwin";
-          modules = [ ./10-darwin/bootstrap.nix { nixpkgs = nixpkgsConfig; } ];
+          modules = [ ./darwin/bootstrap.nix { nixpkgs = nixpkgsConfig; } ];
         };
 
         # My macOS configuration
@@ -100,12 +103,14 @@
       darwinModules = { };
 
       homeManagerModules = {
-        awscli = import ./30-modules/home/programs/awscli.nix;
+        awscli = import ./modules/home/programs/awscli.nix;
       };
 
-      overlays = let path = ./40-overlays;
+      overlays = let path = ./overlays;
       in with builtins;
-      map (n: import (path + ("/" + n))) (filter (n: match ".*\\.nix" n != null || pathExists (path + ("/" + n + "/default.nix")))
+      map (n: import (path + ("/" + n))) (filter (n:
+        match ".*\\.nix" n != null
+        || pathExists (path + ("/" + n + "/default.nix")))
         (attrNames (readDir path)));
 
       # `nix develop`
