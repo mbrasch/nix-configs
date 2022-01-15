@@ -3,8 +3,8 @@
 
   inputs = {
     #nixpkgs-master.url = "github:nixos/nixpkgs/master";
-    #nixpkgs-stable.url = "github:nixos/nixpkgs/nixpkgs-21.11-darwin";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    #nixpkgs-stable.url = "github:nixos/nixpkgs/nixpkgs-21.11-darwin";
     #nixos-stable.url = "github:nixos/nixpkgs/nixos-21.11";
 
     darwin.url = "github:LnL7/nix-darwin";
@@ -60,7 +60,7 @@
     in {
       darwinConfigurations = {
 
-        # Minimal configuration to bootstrap systems
+        # Minimal configuration to bootstrap darwin systems
         bootstrap = makeOverridable darwinSystem {
           system = "x86_64-darwin";
           modules = [ ./darwin/bootstrap.nix { nixpkgs = nixpkgsConfig; } ];

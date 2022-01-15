@@ -1,2 +1,2 @@
-# nix
-My personal Nix and Git playground
+# nix-configs
+My personal Nix and Git playground – everything just stolen
