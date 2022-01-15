@@ -1,1 +1,15 @@
 : 1642201923:0;darwin-rebuild switch --flake .#mbrasch
+: 1642204543:0;zsh
+: 1642204698:0;darwin-rebuild switch --flake .#mbrasch
+: 1642204780:0;zsh
+: 1642204855:0;ll
+: 1642205572:0;zsh
+: 1642205620:0;darwin-rebuild switch --flake .#mbrasch
+: 1642205886:0;darwin-rebuild switch --upgrade --flake .#mbrasch
+: 1642205895:0;darwin-rebuild switch --update --flake .#mbrasch
+: 1642205914:0;darwin-rebuild
+: 1642206078:0;darwin-rebuild switch --update --flake .#mbrasch
+: 1642206081:0;darwin-rebuild switch --flake .#mbrasch
+: 1642206135:0;nix-channel --update
+: 1642206150:0;sudo -i nix-channel --update
+: 1642206187:0;darwin-rebuild switch --flake .#mbrasch

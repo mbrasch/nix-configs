@@ -2,10 +2,10 @@
   description = "Mike's dotfiles";
 
   inputs = {
-    nixpkgs-master.url = "github:nixos/nixpkgs/master";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixpkgs-21.11-darwin";
+    #nixpkgs-master.url = "github:nixos/nixpkgs/master";
+    #nixpkgs-stable.url = "github:nixos/nixpkgs/nixpkgs-21.11-darwin";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nixos-stable.url = "github:nixos/nixpkgs/nixos-21.11";
+    #nixos-stable.url = "github:nixos/nixpkgs/nixos-21.11";
 
     darwin.url = "github:LnL7/nix-darwin";
     darwin.inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -47,7 +47,7 @@
       nixDarwinCommonModules = args@{ user, host
         , hostConfig ? ./darwin/hosts + "/${host}.nix", ... }: [
           home-manager.darwinModules.home-manager
-          ./10-darwin
+          ./darwin
           hostConfig
           rec {
             nixpkgs = nixpkgsConfig;
@@ -90,10 +90,10 @@
       cloudVM = home-manager.lib.homeManagerConfiguration {
         system = "x86_64-linux";
         stateVersion = homeManagerStateVersion;
-        homeDirectory = "/home/martin";
+        homeDirectory = "/home/mbrasch";
         username = "martin";
         configuration = {
-          imports = [ (homeManagerCommonConfig { user = "martin"; }) ];
+          imports = [ (homeManagerCommonConfig { user = "mbrasch"; }) ];
           nixpkgs = nixpkgsConfig;
         };
       };

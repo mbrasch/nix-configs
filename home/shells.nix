@@ -1,15 +1,17 @@
-{ pkgs, lib, ... }: {
+{ config, pkgs, lib, ... }: {
   home.packages = with pkgs; [ pure-prompt ];
 
   programs.zsh = {
     enable = true;
-    dotDir = "${HOME}.config/zsh";
+    dotDir = ".config/zsh";
     enableCompletion = true;
     enableAutosuggestions = true;
+    #enableVteIntegration = true;      # linux only
+    enableSyntaxHighlighting = true;
     autocd = true;
 
     history = {
-      path = "${HOME}.config/zsh/zsh_history";
+      path = ".config/zsh/zsh_history";
       expireDuplicatesFirst = true; # Expire duplicates first.
       extended = true; # Save timestamp into the history file.
       ignoreDups =
