@@ -13,10 +13,8 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     flake-utils.url = "github:numtide/flake-utils";
-    flake-compat = {
-      url = "github:edolstra/flake-compat";
-      flake = false;
-    };
+    flake-compat.url = "github:edolstra/flake-compat";
+    flake-compat.flake = false;
   };
 
   outputs = { self, nixpkgs, darwin, home-manager, flake-utils, ... }@inputs:
@@ -58,6 +56,9 @@
         ];
 
     in {
+
+      # ----------------------------------------------------------------------------------------------------
+
       darwinConfigurations = {
 
         # Minimal configuration to bootstrap darwin systems
@@ -66,7 +67,7 @@
           modules = [ ./darwin/bootstrap.nix { nixpkgs = nixpkgsConfig; } ];
         };
 
-        # My macOS configuration
+        # My primary macOS configuration
         mbrasch = darwinSystem {
           system = "x86_64-darwin";
           modules = nixDarwinCommonModules {
@@ -85,20 +86,28 @@
         };
       };
 
-      # --------------------------------------------------
+      # ----------------------------------------------------------------------------------------------------
 
-      cloudVM = home-manager.lib.homeManagerConfiguration {
-        system = "x86_64-linux";
-        stateVersion = homeManagerStateVersion;
-        homeDirectory = "/home/mbrasch";
-        username = "martin";
-        configuration = {
-          imports = [ (homeManagerCommonConfig { user = "mbrasch"; }) ];
-          nixpkgs = nixpkgsConfig;
+      nixosConfigurations = {
+        bistroserve = home-manager.lib.homeManagerConfiguration {
+          system = "x86_64-linux";
+          stateVersion = homeManagerStateVersion;
+          homeDirectory = "/home/admin";
+          username = "admin";
+          configuration = {
+            imports = [ (homeManagerCommonConfig { user = "admin"; }) ];
+            nixpkgs = nixpkgsConfig;
+          };
         };
+
+        # nixos-vm = mkVM "vm-intel" rec {
+        #   inherit nixpkgs home-manager overlays;
+        #   system = "x86_64-linux";
+        #   user = "admin";
+        # };
       };
 
-      # --------------------------------------------------
+      # ----------------------------------------------------------------------------------------------------
 
       darwinModules = { };
 
