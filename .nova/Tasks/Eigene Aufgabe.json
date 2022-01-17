@@ -1,7 +1,7 @@
 {
   "actions" : {
     "run" : {
-      "enabled" : true,
+      "enabled" : false,
       "script" : "#!\/bin\/sh\nexport SUDO_ASKPASS=\/usr\/local\/bin\/pw\n\nsudo -A darwin-rebuild switch --flake .#mbrasch\n"
     }
   },
