@@ -1,33 +1,30 @@
 #!/bin/bash
 
-RED='\033[0;31m'
-NC='\033[0m' # No Color
-
-echo "$fg{red}*** uninstalling nix-darwin…"
+echo "*** uninstalling nix-darwin…"
 nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A uninstaller
 ./result/bin/darwin-uninstaller
 
-echo "$fg{red}*** uninstalling launchdeamon…"
+echo "*** uninstalling launchdeamon…"
 #sudo launchctl unload -w /Library/LaunchDaemons/org.nixos.nix-daemon.plist
 #sudo rm -v /Library/LaunchDaemons/org.nixos.nix-daemon.plist
 sudo launchctl bootout system/org.nixos.nix-daemon
 sudo rm -v /Library/LaunchDaemons/org.nixos.nix-daemon.plist
 
-echo "$fg{red}*** uninstalling nix…"
+echo "*** uninstalling nix…"
 sudo rm -rfv /etc/nix /etc/static /var/root/.nix-profile /var/root/.nix-defexpr /var/root/.nix-channels
 sudo rm -rfv "${HOME}/.nix-profile" "${HOME}/.nix-defexpr" "${HOME}/.nix-channels"
 
-echo "$fg{red}*** restoring original /bashrc…"
+echo "*** restoring original /bashrc…"
 sudo mv -fv /etc/bashrc.backup-before-nix /etc/bashrc
 
-echo "$fg{red}*** restoring original /zshrc…"
+echo "*** restoring original /zshrc…"
 sudo rm -v /etc/zshrc.before_nix-darwin
 sudo mv -fv /etc/zshrc.backup-before-nix /etc/zshrc
 
-echo "$fg{red}*** removing nixbld users…"
+echo "*** removing nixbld users…"
 for i in {1..32} ; do sudo dscl . delete "/Users/_nixbld$i" ; done
 
-echo "$fg{red}*** delete nix store volume…"
+echo "*** delete nix store volume…"
 sudo diskutil apfs deleteVolume "Nix Store"
 
 echo "Nix should now be completely removed."
