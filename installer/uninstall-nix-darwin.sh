@@ -15,7 +15,7 @@ sudo rm -rfv /etc/nix /etc/static /var/root/.nix-profile /var/root/.nix-defexpr 
 sudo rm -rfv "${HOME}/.nix-profile" "${HOME}/.nix-defexpr" "${HOME}/.nix-channels"
 
 echo "*** restoring original /bashrc…"
-sudo mv -fv /etc/bashrc.backup-before-nix /etc/bashrc
+sudo mv -fv /etc/bash.bashrc.backup-before-nix /etc/bash.bashrc
 
 echo "*** restoring original /zshrc…"
 sudo rm -v /etc/zshrc.before_nix-darwin
