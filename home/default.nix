@@ -180,7 +180,7 @@ in rec {
       ffmpeg # A complete, cross-platform solution to record, convert and stream audio and video
       flvstreamer # Command-line RTMP client
       tesseract4 # OCR engine
-      youtube-dl # Command-line tool to download videos from YouTube.com and other sites
+      yt-dlp # Command-line tool to download videos from YouTube.com and other sites
       #coursera-dl                     # CLI for downloading Coursera.org videos and naming them
       gallery-dl # CLI program to download image-galleries and -collections from several image hosting sites
       pandoc # Conversion between markup formats
