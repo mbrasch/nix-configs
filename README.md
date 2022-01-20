@@ -17,7 +17,7 @@ nix-shell -p nix-info --run "nix-info -m"
 
 nix build .#darwinConfigurations.bootstrap.system
 sudo rm /etc/nix/nix.conf
-./result/sw/bin/darwin-rebuild switch --flake .#bootstrap
+sudo -i ./result/sw/bin/darwin-rebuild switch --flake .#bootstrap
 ```
 
 *new shell*
