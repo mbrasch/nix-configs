@@ -48,7 +48,6 @@
     };
 
     casks = [
-      #"dash"
       "iterm2"
       "arduino"
       "raspberry-pi-imager"
@@ -57,7 +56,7 @@
       "firefox"
       "launchcontrol"
       "signal"
-
+      "knockknock"
     ];
 
     brews = [ ];

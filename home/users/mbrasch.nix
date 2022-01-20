@@ -2,6 +2,7 @@
 let
   name = "Mike Brasch";
   email = "mikebrasch@fastmail.fm";
+  key = "mikebrasch@github";
   home_directory = "${config.home.homeDirectory}";
 
   tomlFormat = pkgs.formats.toml { };
@@ -49,7 +50,7 @@ in {
       userName = "${name}";
       userEmail = "${email}";
       signing = {
-        key = "${email}";
+        key = "${key}";
         signByDefault = true;
       };
       extraConfig = { github.user = "mbrasch"; };
