@@ -131,7 +131,6 @@ in rec {
       #magic-wormhole                 # Securely transfer data between computers
       #croc                           # Securely transfer data between computers
       tmux
-      inetutils
 
       ###### language stuff ######
 
