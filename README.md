@@ -64,3 +64,9 @@ fi
 ```
 darwin-rebuild switch --flake ssh+git://git@github.com:mbrasch/nix-configs#mbrasch
 ```
+
+```
+nix-tree
+nix-locate bin/ping
+nix show-derivation nixpkgs#legacyPackages.x86_64-darwin.inetutils
+```

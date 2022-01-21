@@ -1,19 +1,15 @@
 { config, pkgs, lib, ... }:
-let
-  fontFamily = "Hack";
-in
-{
+let fontFamily = "Hack";
+in {
   programs.alacritty = {
-    enable = true;
+    enable = false;
     settings = {
       window = {
         padding.x = 10;
         padding.y = 10;
         dynamic_title = true;
       };
-      scrolling = {
-        history = 10000;
-      };
+      scrolling = { history = 10000; };
       font = {
         normal.family = "${fontFamily}";
         bold.family = "${fontFamily}";
@@ -21,13 +17,11 @@ in
         bold_italic.family = "${fontFamily}";
         size = 13.0;
       };
-      key_bindings = [
-        {
-          key = "Q";
-          mods = "Control";
-          chars = "\\x11";
-        }
-      ];
+      key_bindings = [{
+        key = "Q";
+        mods = "Control";
+        chars = "\\x11";
+      }];
       colors = {
         primary = {
           background = "0x2d2d2d";

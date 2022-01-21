@@ -2,10 +2,9 @@
 let
   gitTemplateDir = "git/template";
   binDir = ".local/bin";
-in
-{
+in {
   programs.git = {
-    enable = true;
+    enable = false;
     package = pkgs.git;
 
     aliases = {
@@ -93,15 +92,16 @@ in
     ];
   };
 
-  programs.git.extraConfig.init.templateDir = "${config.xdg.configHome}/${gitTemplateDir}";
+  programs.git.extraConfig.init.templateDir =
+    "${config.xdg.configHome}/${gitTemplateDir}";
   xdg.configFile."${gitTemplateDir}/hooks" = {
     recursive = true;
     source = ./git/hooks;
   };
 
   home.file = {
-    "${binDir}/git-jump" = { 
-      executable = true; 
+    "${binDir}/git-jump" = {
+      executable = true;
       source = ./git/addons/git-jump;
     };
   };

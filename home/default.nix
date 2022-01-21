@@ -8,7 +8,7 @@ in rec {
   home = {
     sessionVariables = {
       EDITOR = "${pkgs.nano}/bin/nano";
-      EMAIL = "${config.programs.git.userEmail}";
+      #EMAIL = "${config.programs.git.userEmail}";
       PAGER = "${pkgs.less}/bin/less";
       CLICOLOR = true;
       GPG_TTY = "$TTY";
@@ -101,7 +101,7 @@ in rec {
 
       #sshfs
       openssh
-      telnet
+      #telnet
       mtr # A network diagnostics tool
       nmap # A free and open source utility for network discovery and security auditing
       ncat # A free and open source utility for network discovery and security auditing
@@ -139,7 +139,7 @@ in rec {
       #(lua.withPackages (p: with p; [ luarocks mpack ]))
 
       #---
-      (python311.withPackages (p: with p; [ pip jinja2 protobuf passlib ]))
+      (python3.withPackages (p: with p; [ pip jinja2 protobuf passlib ]))
       #python39Packages.adb-homeassistant # A pure python implementation of the Android ADB and Fastboot protocols
 
       #---
@@ -194,23 +194,23 @@ in rec {
 
     home-manager = { enable = true; };
 
-    awscli = {
-      package = pkgs.awscli2;
-      enable = false;
-      enableBashIntegration = true;
-      enableZshIntegration = true;
-      awsVault = {
-        enable = true;
-        prompt = "ykman";
-        backend = "pass";
-        passPrefix = "aws_vault/";
-      };
-    };
+    # awscli = {
+    #   package = pkgs.awscli2;
+    #   enable = false;
+    #   enableBashIntegration = true;
+    #   enableZshIntegration = true;
+    #   awsVault = {
+    #     enable = true;
+    #     prompt = "ykman";
+    #     backend = "pass";
+    #     passPrefix = "aws_vault/";
+    #   };
+    # };
 
-    browserpass = {
-      enable = false;
-      browsers = [ "firefox" ];
-    };
+    # browserpass = {
+    #   enable = false;
+    #   browsers = [ "firefox" ];
+    # };
 
     direnv = {
       enable = true;
@@ -230,44 +230,44 @@ in rec {
 
     go.enable = true;
 
-    ssh = {
-      enable = true;
-
-      controlMaster = "auto";
-      controlPath = "${tmp_directory}/ssh-%u-%r@%h:%p";
-      controlPersist = "1800";
-
-      forwardAgent = true;
-      serverAliveInterval = 60;
-
-      hashKnownHosts = true;
-
-      extraConfig = ''
-        #SCE_GROUP:B0713CB6-A009-4E72-AC09-A9DE823B9F60:::Privat
-
-        Host BistroServe
-          User admin
-          HostName bistroserve
-          IdentityFile ~/.ssh/private.id.rsa
-          #SCEIcon home
-          #SCEGroup B0713CB6-A009-4E72-AC09-A9DE823B9F60
-
-        #SCE_GROUP:D34811CE-4F87-4B7F-AFAE-826B9310D5AF:::Serviceware
-
-        Host bc-climgmt3.pmcs.de
-          User mbrasch
-          IdentityFile ~/.ssh/serviceware.id.rsa
-          #SCEIcon suitcase
-          #SCEGroup D34811CE-4F87-4B7F-AFAE-826B9310D5AF
-      '';
-    };
+    #     ssh = {
+    #       enable = true;
+    #
+    #       controlMaster = "auto";
+    #       controlPath = "${tmp_directory}/ssh-%u-%r@%h:%p";
+    #       controlPersist = "1800";
+    #
+    #       forwardAgent = true;
+    #       serverAliveInterval = 60;
+    #
+    #       hashKnownHosts = true;
+    #
+    #       extraConfig = ''
+    #         #SCE_GROUP:B0713CB6-A009-4E72-AC09-A9DE823B9F60:::Privat
+    #
+    #         Host BistroServe
+    #           User admin
+    #           HostName bistroserve
+    #           IdentityFile ~/.ssh/private.id.rsa
+    #           #SCEIcon home
+    #           #SCEGroup B0713CB6-A009-4E72-AC09-A9DE823B9F60
+    #
+    #         #SCE_GROUP:D34811CE-4F87-4B7F-AFAE-826B9310D5AF:::Serviceware
+    #
+    #         Host bc-climgmt3.pmcs.de
+    #           User mbrasch
+    #           IdentityFile ~/.ssh/serviceware.id.rsa
+    #           #SCEIcon suitcase
+    #           #SCEGroup D34811CE-4F87-4B7F-AFAE-826B9310D5AF
+    #       '';
+    #     };
   };
 
-  xdg = {
-    enable = true;
-
-    configHome = "${home_directory}/.config";
-    dataHome = "${home_directory}/.local/share";
-    cacheHome = "${home_directory}/.cache";
-  };
+  #   xdg = {
+  #     enable = true;
+  #
+  #     configHome = "${home_directory}/.config";
+  #     dataHome = "${home_directory}/.local/share";
+  #     cacheHome = "${home_directory}/.cache";
+  #   };
 }
