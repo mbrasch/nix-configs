@@ -1,6 +1,4 @@
 # nix-configs
-My personal Nix and Git playground – everything just stolen.
-
 This repo is not a good example. It is a very experimental repo and its use could cause an unprecedented catastrophe - so be warned.
 
 However, if you have any suggestions for improvement or the like, please let us know.
