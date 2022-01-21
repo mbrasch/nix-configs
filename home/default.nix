@@ -117,7 +117,7 @@ in rec {
       #gotop                           # A terminal based graphical activity monitor inspired by gtop and vtop
       #coreutils				              # The basic file, shell and text manipulation utilities of the GNU operating system
       #ocrmypdf                        # Adds an OCR text layer to scanned PDF files, allowing them to be searched   –>   "Unsupported OS"
-      #thefuck                        # Magnificent app which corrects your previous console command
+      #thefuck                        # Magnificent app which correct your previous console command
       #ngrep                          # Network packet analyzer -> Linux only
       mitmproxy # Man-in-the-middle proxy
       #p0f                            # Passive network reconnaissance and fingerprinting tool   –>   failed with exit code 2;
@@ -131,6 +131,7 @@ in rec {
       #magic-wormhole                 # Securely transfer data between computers
       #croc                           # Securely transfer data between computers
       tmux
+      inetutils
 
       ###### language stuff ######
 

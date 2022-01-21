@@ -60,3 +60,7 @@ fi
 ```shell
 ~~> Setting up shell profiles: /etc/bashrc /etc/profile.d/nix.sh /etc/zshrc /etc/bash.bashrc /etc/zsh/zshrc
 ```
+
+```
+darwin-rebuild switch --flake ssh+git://git@github.com:mbrasch/nix-configs#mbrasch
+```
