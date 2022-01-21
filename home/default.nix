@@ -139,7 +139,7 @@ in rec {
       #(lua.withPackages (p: with p; [ luarocks mpack ]))
 
       #---
-      (python310.withPackages (p: with p; [ pip jinja2 protobuf passlib ]))
+      (python311.withPackages (p: with p; [ pip jinja2 protobuf passlib ]))
       #python39Packages.adb-homeassistant # A pure python implementation of the Android ADB and Fastboot protocols
 
       #---
