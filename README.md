@@ -1,7 +1,6 @@
 # nix-configs
-My personal Nix and Git playground – everything just stolen.
-
-This repo is not a good example. It is a very experimental repo and its use could cause an unprecedented catastrophe - so be warned.
+My personal Nix and Git playground – everything just stolen. This repo is not a good example. Major changes will happen all the time.
+It is a single experiment and using it could cause an unprecedented disaster - so be warned.
 
 However, if you have any suggestions for improvement or the like, please let us know.
 
@@ -22,8 +21,10 @@ echo "experimental-features = nix-command flakes" | sudo tee -a /etc/nix/nix.con
 nix-shell -p nix-info --run "nix-info -m"
 
 nix build .#darwinConfigurations.bootstrap.system
-sudo rm /etc/nix/nix.conf
-sudo -i ./result/sw/bin/darwin-rebuild switch --flake .#bootstrap
+sudo rm /etc/nix/nix.conf                      # otherwise darwin-rebuild will fail to create a symlink to the generated nix config
+echo 'run\tprivate/var/run' | sudo tee -a /etc/synthetic.conf
+/System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t
+./result/sw/bin/darwin-rebuild switch --flake .#bootstrap
 ```
 
 *new shell*
@@ -62,10 +63,15 @@ fi
 ## NixOS
 
 ### Initial install
-...
+From running NixOS installer or NixOS System run:
+```
+nixos-install --flake github:mbrasch/nix-configs#nixosConfigurations.bootstrap.system
+```
 
 ### Regular use
-...
+```
+nixos-rebuild switch --flake github:mbrasch/nix-configs#bistroserve
+```
 
 
 # Notes to myself
@@ -82,4 +88,8 @@ darwin-rebuild switch --flake ssh+git://git@github.com:mbrasch/nix-configs#mbras
 nix-tree
 nix-locate bin/ping
 nix show-derivation nixpkgs#legacyPackages.x86_64-darwin.inetutils
+realpath $(which nix-build)
+
+
+
 ```

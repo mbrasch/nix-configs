@@ -30,7 +30,7 @@ in rec {
       #nix-serve                      # A utility for sharing a Nix store as a binary cache
       nixfmt # An opinionated formatter for Nix
       nixbang # A special shebang to run scripts in a nix-shell
-      #vulnix # NixOS vulnerability scanner
+      vulnix # NixOS vulnerability scanner
 
       #disnix                         # A Nix-based distributed service deployment tool
       #disnixos                       # Provides complementary NixOS infrastructure deployment to Disnix
