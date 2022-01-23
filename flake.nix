@@ -50,6 +50,7 @@
           rec {
             nixpkgs = nixpkgsConfig;
             users.users.${user}.home = "/Users/${user}";
+            home-manager.useUserPackages = true;
             home-manager.useGlobalPkgs = true;
             home-manager.users.${user} = homeManagerCommonConfig args;
           }
