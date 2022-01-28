@@ -20,7 +20,7 @@ echo "experimental-features = nix-command flakes" | sudo tee -a /etc/nix/nix.con
 # optional for testing nix
 nix-shell -p nix-info --run "nix-info -m"
 
-nix build .#darwinConfigurations.bootstrap.system
+nix build --flake github:mbrasch/nix-configs#darwinConfigurations.bootstrap.system
 sudo rm /etc/nix/nix.conf                      # otherwise darwin-rebuild will fail to create a symlink to the generated nix config
 echo 'run\tprivate/var/run' | sudo tee -a /etc/synthetic.conf
 /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t
@@ -30,7 +30,7 @@ echo 'run\tprivate/var/run' | sudo tee -a /etc/synthetic.conf
 *new shell*
 
 ```shell
-darwin-rebuild switch --flake .#mbrasch
+darwin-rebuild switch --flake github:mbrasch/nix-configs#mbrasch
 ```
 
 ### Regular use
@@ -38,13 +38,13 @@ darwin-rebuild switch --flake .#mbrasch
 **rebuild config**
 
 ```shell
-darwin-rebuild switch --flake .#mbrasch
+darwin-rebuild switch --flake github:mbrasch/nix-configs#mbrasch
 ```
 
 **update packages**
 
 ```shell
-nix flake update .#mbrasch
+nix flake update github:mbrasch/nix-configs#mbrasch
 ```
 
 ### Troubleshooting
