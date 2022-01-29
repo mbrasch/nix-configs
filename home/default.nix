@@ -117,7 +117,7 @@ in rec {
       dnstop # libpcap application that displays DNS traffic on your network
       dnsperf # Tools for DNS benchmaring
       #gotop                           # A terminal based graphical activity monitor inspired by gtop and vtop
-      #coreutils				              # The basic file, shell and text manipulation utilities of the GNU operating system
+      coreutils				              # The basic file, shell and text manipulation utilities of the GNU operating system
       #ocrmypdf                        # Adds an OCR text layer to scanned PDF files, allowing them to be searched   –>   "Unsupported OS"
       #thefuck                        # Magnificent app which correct your previous console command
       #ngrep                          # Network packet analyzer -> Linux only
