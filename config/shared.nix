@@ -2,7 +2,7 @@
 
 { pkgs, lib, options, ... }: {
   nix = {
-    package = pkgs.nix_2_6; # war: nixFlakes
+    package = pkgs.nixUnstable; # war: nixFlakes
     extraOptions = ''
       experimental-features = nix-command flakes
       keep-derivations = true
