@@ -27,7 +27,7 @@
       systems = [ "x86_64-darwin" "x86_64-linux" ];
       forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system);
 
-      nixpkgssConfig = with inputs; rec {
+      nixpkgsConfig = with inputs; rec {
         config = { allowUnfree = true; };
         overlays = self.overlays;
       };
