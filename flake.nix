@@ -113,16 +113,16 @@
 
       # darwinModules = { };
 
-      homeManagerModules = {
-        awscli = import ./modules/home/programs/awscli.nix;
-      };
+      # homeManagerModules = {
+      #   awscli = import ./modules/home/programs/awscli.nix;
+      # };
 
-      # overlays = let path = ./overlays;
-      # in with builtins;
-      # map (n: import (path + ("/" + n))) (filter (n:
-      #   match ".*\\.nix" n != null
-      #   || pathExists (path + ("/" + n + "/default.nix")))
-      #   (attrNames (readDir path)));
+      overlays = let path = ./overlays;
+      in with builtins;
+      map (n: import (path + ("/" + n))) (filter (n:
+        match ".*\\.nix" n != null
+        || pathExists (path + ("/" + n + "/default.nix")))
+        (attrNames (readDir path)));
 
       # `nix develop`
       devShell = forAllSystems (system:
