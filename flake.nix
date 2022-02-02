@@ -111,7 +111,7 @@
 
       # ----------------------------------------------------------------------------------------------------
 
-      darwinModules = { };
+      # darwinModules = { };
 
       homeManagerModules = {
         awscli = import ./modules/home/programs/awscli.nix;
