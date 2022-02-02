@@ -21,8 +21,7 @@
   outputs = { self, nixpkgs, darwin, home-manager, nur, flake-utils, ... }@inputs:
     let
       inherit (darwin.lib) darwinSystem;
-      inherit (inputs.nixpkgs-unstable.lib)
-        attrValues makeOverridable optionalAttrs singleton;
+      inherit (inputs.nixpkgs-unstable.lib) attrValues makeOverridable optionalAttrs singleton;
 
       systems = [ "x86_64-darwin" "x86_64-linux" ];
       forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system);
@@ -113,9 +112,9 @@
 
       # darwinModules = { };
 
-      # homeManagerModules = {
-      #   awscli = import ./modules/home/programs/awscli.nix;
-      # };
+      homeManagerModules = {
+        awscli = import ./modules/home/programs/awscli.nix;
+      };
 
       overlays = let path = ./overlays;
       in with builtins;
