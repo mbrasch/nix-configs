@@ -33,28 +33,25 @@
 
       # Home Manager configuration shared between all different configurations.
       homeManagerStateVersion = "22.05";
-      homeManagerCommonConfig =
-        { user, userConfig ? ./home + "/users/${user}.nix", ... }: {
-          imports = attrValues self.homeManagerModules ++ [
-            userConfig
-            ./home
-            { home.stateVersion = homeManagerStateVersion; }
-          ];
-        };
-
-      nixDarwinCommonModules = args@{ user, host
-        , hostConfig ? ./darwin/hosts + "/${host}.nix", ... }: [
-          home-manager.darwinModules.home-manager
-          ./darwin
-          hostConfig
-          rec {
-            nixpkgs = nixpkgsConfig;
-            users.users.${user}.home = "/Users/${user}";
-            home-manager.useUserPackages = true;
-            home-manager.useGlobalPkgs = true;
-            home-manager.users.${user} = homeManagerCommonConfig args;
-          }
+      homeManagerCommonConfig = { user, userConfig ? ./home + "/users/${user}.nix", ... }: {
+        imports = attrValues self.homeManagerModules ++ [
+          userConfig
+          ./home
+          { home.stateVersion = homeManagerStateVersion; }
         ];
+      };
+
+      nixDarwinCommonModules = args@{ user, host, hostConfig ? ./darwin/hosts + "/${host}.nix", ... }: [
+        home-manager.darwinModules.home-manager
+        ./darwin
+        hostConfig rec {
+          nixpkgs = nixpkgsConfig;
+          users.users.${user}.home = "/Users/${user}";
+          home-manager.useUserPackages = true;
+          home-manager.useGlobalPkgs = true;
+          home-manager.users.${user} = homeManagerCommonConfig args;
+        }
+      ];
 
     in {
 

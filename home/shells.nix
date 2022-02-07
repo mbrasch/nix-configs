@@ -14,10 +14,8 @@
       path = ".config/zsh/zsh_history";
       expireDuplicatesFirst = true; # Expire duplicates first.
       extended = true; # Save timestamp into the history file.
-      ignoreDups =
-        true; # Do not enter command lines into the history list if they are duplicates of the previous event.
-      ignoreSpace =
-        true; # Do not enter command lines into the history list if the first character is a space.
+      ignoreDups = true; # Do not enter command lines into the history list if they are duplicates of the previous event.
+      ignoreSpace = true; # Do not enter command lines into the history list if the first character is a space.
       share = true; # Share command history between zsh sessions.
       save = 10000; # Number of history lines to save.
       size = 10000; # Number of history lines to keep.

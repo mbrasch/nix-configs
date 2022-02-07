@@ -70,3 +70,7 @@ mkdir /mnt/boot
 mount "$DISK-part3" /mnt/boot
 
 echo -e "Now you are ready to nixos-install your system."
+
+nixos-generate-config --root /mnt
+nano /mnt/etc/nixos/configuration.nix
+nixos-install
