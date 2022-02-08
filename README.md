@@ -78,6 +78,9 @@ nixos-rebuild switch --flake github:mbrasch/nix-configs#bistroserve
 
 ```shell
 ~~> Setting up shell profiles: /etc/bashrc /etc/profile.d/nix.sh /etc/zshrc /etc/bash.bashrc /etc/zsh/zshrc
+
+# install min. nixos on zfs:mbrasch/nix-configs#
+sh <(curl -L https://github.com/mbrasch/nix-configs/installer/install-nixos.sh)
 ```
 
 ```

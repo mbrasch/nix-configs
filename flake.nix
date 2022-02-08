@@ -87,6 +87,18 @@
       # ----------------------------------------------------------------------------------------------------
 
       nixosConfigurations = {
+        bootstrap = home-manager.lib.homeManagerConfiguration {
+          system = "x86_64-linux";
+          stateVersion = homeManagerStateVersion;
+          homeDirectory = "/home/admin";
+          username = "admin";
+          configuration = {
+            imports = [ (homeManagerCommonConfig { user = "admin"; }) ];
+            nixpkgs = nixpkgsConfig;
+          };
+        };
+
+
         bistroserve = home-manager.lib.homeManagerConfiguration {
           system = "x86_64-linux";
           stateVersion = homeManagerStateVersion;
