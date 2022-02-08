@@ -31,7 +31,7 @@ in rec {
       nixfmt # An opinionated formatter for Nix
       nixbang # A special shebang to run scripts in a nix-shell
       #vulnix # NixOS vulnerability scanner
-      nix-doc
+      #nix-doc
       nix-template
 
       #disnix                         # A Nix-based distributed service deployment tool
