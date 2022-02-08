@@ -25,7 +25,7 @@ in rec {
       nix-tree # Interactively browse a Nix store paths dependencies
       nix-bundle # Create bundles from Nixpkgs attributes
       nix-linter # Linter for Nix(pkgs), based on hnix   –>   build error: Encountered missing or private dependencies: hnix ==0.6.*
-      nix-plugins # Collection of miscellaneous plugins for the nix expression language
+      #nix-plugins # Collection of miscellaneous plugins for the nix expression language
       nix-review # Review pull-requests on https://github.com/NixOS/nixpkgs
       #nix-serve                      # A utility for sharing a Nix store as a binary cache
       nixfmt # An opinionated formatter for Nix
