@@ -138,7 +138,7 @@ in rec {
 
       #--- python
 
-      (python3.withPackages (p: with p; [ pip jinja2 protobuf passlib pyfritzhome ]))
+      (python3.withPackages (p: with p; [ pip jinja2 protobuf passlib pyfritzhome prettifier ]))
 
       #--- php
 
@@ -160,6 +160,7 @@ in rec {
       autoconf
       go
       (lua.withPackages (p: with p; [ luarocks mpack ]))
+      spidermonkey
 
       ###### other stuff ######
 
