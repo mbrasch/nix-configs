@@ -181,7 +181,7 @@ in rec {
       gallery-dl                      # CLI program to download image-galleries and -collections from several image hosting sites
       pandoc                          # Conversion between markup formats
       graphviz
-      espanso
+      #espanso
     ];
   };
 
