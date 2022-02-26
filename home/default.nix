@@ -86,7 +86,7 @@ in rec {
       ###### services stuff ######
 
       davmail
-      netdata
+      #netdata
 
       ##### modern alternatives to old tools #####
 
