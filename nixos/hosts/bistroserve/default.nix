@@ -25,8 +25,7 @@
   networking = {
     hostName = "BistroServe";
     hostId = "2a1b5bfb";
-    useDHCP =
-      false; # global useDHCP flag is deprecated -> explicitly set to false
+    useDHCP = false; # global useDHCP flag is deprecated -> explicitly set to false
     interfaces.enp2s0.useDHCP = true;
     wireless.enable = false;
 
@@ -67,8 +66,7 @@
     enable = true;
     layout = "de";
     xkbOptions = "eurosign:e";
-    libinput.enable =
-      true; # Enable touchpad support (enabled default in most desktopManager)
+    libinput.enable = true; # Enable touchpad support (enabled default in most desktopManager)
 
     displayManager.sddm.enable = true;
     desktopManager.plasma5.enable = true;
@@ -176,12 +174,9 @@
       histSize = 10000;
 
       #promptInit = '''';
-      interactiveShellInit =
-        ""; # Shell script code called during interactive zsh shell initialisation.
-      loginShellInit =
-        ""; # Shell script code called during zsh login shell initialisation.
-      shellInit =
-        ""; # Shell script code called during zsh shell initialisation.
+      interactiveShellInit = ""; # Shell script code called during interactive zsh shell initialisation.
+      loginShellInit = ""; # Shell script code called during zsh login shell initialisation.
+      shellInit = ""; # Shell script code called during zsh shell initialisation.
 
       setOptions = [
         "HIST_IGNORE_DUPS"
@@ -277,8 +272,7 @@
 
       shares = {
         homes = {
-          browseable =
-            "no"; # note: each home will be browseable; the "homes" share will not.
+          browseable =  "no"; # note: each home will be browseable; the "homes" share will not.
           "read only" = "no";
           "guest ok" = "no";
         };
@@ -288,14 +282,12 @@
           writable = "yes";
           "guest ok" = "no";
           #"valid users" = "admin";
-          "create mask" =
-            "0640"; # Don't give access to world; don't create new files as executable
+          "create mask" = "0640"; # Don't give access to world; don't create new files as executable
           "directory mask" = "0750";
           #"force user" = "admin";
           #"force group" = "groupname";
           "map archive" = "no"; # Don't map archive flag to owner's execute bit
-          "wide links" =
-            "yes"; # Fix issues with accessing symlinks via file dialogs (but not explorer??) on Windows
+          "wide links" = "yes"; # Fix issues with accessing symlinks via file dialogs (but not explorer??) on Windows
         };
 
         #media = {
@@ -380,8 +372,7 @@
     trustedUsers = [ "root" "@wheel" ];
     autoOptimiseStore = true;
     requireSignedBinaryCaches = true; # RECOMMENDED!!!
-    trustedBinaryCaches =
-      [ ]; # List of binary cache URLs that non-root users can use (in addition to those specified using nix.binaryCaches)
+    trustedBinaryCaches = [ ]; # List of binary cache URLs that non-root users can use (in addition to those specified using nix.binaryCaches)
     #binaryCachePublicKeys = [   ];
     #binaryCaches = [   ];
     buildCores = 0; # 0 = use all cores
@@ -421,8 +412,7 @@
 
     readOnlyStore = true; # RECOMMENDED!!!
     registry = { }; # A system-wide flake registry.
-    sandboxPaths =
-      [ ]; # Directories from the host filesystem to be included in the sandbox.
+    sandboxPaths = [ ]; # Directories from the host filesystem to be included in the sandbox.
 
     sshServe = {
       enable =

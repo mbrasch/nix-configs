@@ -5,10 +5,7 @@ let
   key = "mikebrasch@github";
   home_directory = "${config.home.homeDirectory}";
 
-  tomlFormat = pkgs.formats.toml { };
 in {
-  home.packages = with pkgs; [ himalaya ];
-
   services = {
     # yabai = {
     #   enable = false;
@@ -61,29 +58,4 @@ in {
     man.enable = true;
     #adb.enable = true;
   };
-
-  # xdg.configFile."himalaya/config.toml" = {
-  #   source = tomlFormat.generate "himalaya-config" {
-  #     name = "${name}";
-  #     downloads-dir = "${home_directory}/Downloads";
-  #     signature = ''
-  #       --
-  #       ${name}
-  #     '';
-  #     fastmail = {
-  #       default = true;
-  #       email = "${email}";
-  #       imap-host = "imap.fastmail.com";
-  #       imap-port = 993;
-  #       imap-login = "${email}";
-  #       imap-passwd-cmd = "${pkgs.pass}/bin/pass show email/imap.fastmail.com";
-  #       smtp-host = "smtp.fastmail.com";
-  #       smtp-port = 587;
-  #       smtp-starttls = true;
-  #       smtp-login = "${email}";
-  #       smtp-passwd-cmd = "${pkgs.pass}/bin/pass show email/smtp.fastmail.com";
-  #     };
-  #   };
-  # };
-
 }

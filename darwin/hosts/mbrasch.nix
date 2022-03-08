@@ -59,7 +59,9 @@
       "knockknock"
     ];
 
-    brews = [ "iproute2mac" ];
+    brews = [
+      "iproute2mac"
+    ];
 
   };
 }

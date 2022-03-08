@@ -5,7 +5,7 @@
     #nixpkgs-master.url = "github:nixos/nixpkgs/master";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     #nixpkgs-stable.url = "github:nixos/nixpkgs/nixpkgs-21.11-darwin";
-    #nixos-stable.url = "github:nixos/nixpkgs/nixos-21.11";
+    nixos-stable.url = "github:nixos/nixpkgs/nixos-21.11";
 
     darwin.url = "github:LnL7/nix-darwin";
     darwin.inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -28,7 +28,6 @@
 
       nixpkgsConfig = with inputs; rec {
         config = { allowUnfree = true; };
-        overlays = self.overlays;
       };
 
       # Home Manager configuration shared between all different configurations.
@@ -124,13 +123,6 @@
       homeManagerModules = {
         awscli = import ./modules/home/programs/awscli.nix;
       };
-
-      overlays = let path = ./overlays;
-      in with builtins;
-      map (n: import (path + ("/" + n))) (filter (n:
-        match ".*\\.nix" n != null
-        || pathExists (path + ("/" + n + "/default.nix")))
-        (attrNames (readDir path)));
 
       # `nix develop`
       devShell = forAllSystems (system:

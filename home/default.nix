@@ -38,7 +38,7 @@ in rec {
       #disnixos                        # Provides complementary NixOS infrastructure deployment to Disnix
       #dysnomia                        # Automated deployment of mutable components and services for Disnix
 
-      #nixops                          # NixOS cloud provisioning and deployment tool
+      nixopsUnstable                  # NixOS cloud provisioning and deployment tool
       #nixops-dns                      # DNS server for resolving NixOps machines
       morph
       lorri                           # Your project's nix-env
@@ -54,9 +54,9 @@ in rec {
       #docker-compose                  # Multi-container orchestration for Docker
       #docker-machine                  # Docker Machine is a tool that lets you install Docker Engine on virtual hosts, and manage Docker Engine on the hosts
       #linuxkit                        # A toolkit for building secure, portable and lean operating systems for containers
-      ansible                         # Radically simple IT automation
+      #ansible                         # Radically simple IT automation
       #ansible-lint                    # Best practices checker for Ansible
-      vagrant                         # A tool for building complete development environments
+      #vagrant                         # A tool for building complete development environments
       #terraform                       # Tool for building, changing, and versioning infrastructure
       #packer                          # A tool for creating identical machine images for multiple platforms from a single source configuration
       #hashi-ui                        # A modern user interface for hashicorp Consul & Nomad
@@ -86,7 +86,6 @@ in rec {
       ###### services stuff ######
 
       davmail
-      #netdata
 
       ##### modern alternatives to old tools #####
 
@@ -101,9 +100,7 @@ in rec {
 
       ##### network stuff #####
 
-      #sshfs
       openssh
-      #telnet
       mtr                             # A network diagnostics tool
       nmap                            # A free and open source utility for network discovery and security auditing
       ncat                            # A free and open source utility for network discovery and security auditing
@@ -121,7 +118,7 @@ in rec {
       #ocrmypdf                       # Adds an OCR text layer to scanned PDF files, allowing them to be searched   –>   "Unsupported OS"
       #thefuck                        # Magnificent app which correct your previous console command
       #ngrep                          # Network packet analyzer   ->   Linux only
-      # mitmproxy                       # Man-in-the-middle proxy   –>   build failure
+      #mitmproxy                       # Man-in-the-middle proxy   –>   build failure
       #p0f                            # Passive network reconnaissance and fingerprinting tool   –>   failed with exit code 2;
       #endlessh                       # SSH tarpit that slowly sends an endless banner
       #duplicati                      # A free backup client that securely stores encrypted, incremental, compressed backups on cloud storage services and remote file servers
@@ -138,16 +135,20 @@ in rec {
 
       #--- python
 
-      (python3.withPackages (p: with p; [ pip jinja2 protobuf passlib pyfritzhome prettifier ]))
+      (python3.withPackages (p: with p; [ pip jinja2 protobuf passlib pyfritzhome ]))
 
       #--- php
 
       php                            # no withPackages
       phpExtensions.mbstring
 
+      #--- javascript
+
+      nodejs
+
       #--- perl
 
-      (perl.withPackages  (p: with p; [ IO ]))
+      #(perl.withPackages  (p: with p; [ IO ]))
 
       #--- ruby
 
@@ -159,8 +160,8 @@ in rec {
       adoptopenjdk-openj9-bin-11
       autoconf
       go
+      go-langserver
       (lua.withPackages (p: with p; [ luarocks mpack ]))
-      spidermonkey
 
       ###### other stuff ######
 
@@ -168,18 +169,13 @@ in rec {
       tealdeer                        # tldr
       bandwhich                       # network utilization by process
       grex                            # A command-line tool for generating regular expressions from user-provided test cases
-      #nutshell                        # modern shell
-      lastpass-cli                    # Stores, retrieves, generates, and synchronizes passwords securely
       git
-      #git-town                        # Generic, high-level git support for git-flow workflows
       file                            # A program that shows the type of files
       htop                            # An interactive process viewer
       ffmpeg                          # A complete, cross-platform solution to record, convert and stream audio and video
       flvstreamer                     # Command-line RTMP client
       tesseract4                      # OCR engine
       yt-dlp                          # Command-line tool to download videos from YouTube.com and other sites
-      #coursera-dl                     # CLI for downloading Coursera.org videos and naming them
-      gallery-dl                      # CLI program to download image-galleries and -collections from several image hosting sites
       pandoc                          # Conversion between markup formats
       graphviz
       #espanso
@@ -189,24 +185,6 @@ in rec {
   programs = {
 
     home-manager = { enable = true; };
-
-    # awscli = {
-    #   package = pkgs.awscli2;
-    #   enable = false;
-    #   enableBashIntegration = true;
-    #   enableZshIntegration = true;
-    #   awsVault = {
-    #     enable = true;
-    #     prompt = "ykman";
-    #     backend = "pass";
-    #     passPrefix = "aws_vault/";
-    #   };
-    # };
-
-    # browserpass = {
-    #   enable = false;
-    #   browsers = [ "firefox" ];
-    # };
 
     direnv = {
       enable = true;
@@ -224,46 +202,46 @@ in rec {
       enableZshIntegration = true;
     };
 
-    go.enable = true;
+#     ssh = {
+#       enable = true;
+#
+#       controlMaster = "auto";
+#       controlPath = "${tmp_directory}/ssh-%u-%r@%h:%p";
+#       controlPersist = "1800";
+#
+#       forwardAgent = true;
+#       serverAliveInterval = 60;
+#
+#       hashKnownHosts = true;
+#
+#       extraConfig = ''
+#         #SCE_GROUP:B0713CB6-A009-4E72-AC09-A9DE823B9F60:::Privat
+#
+#         Host BistroServe
+#           User admin
+#           HostName bistroserve
+#           IdentityFile ~/.ssh/private.id.rsa
+#           #SCEIcon home
+#           #SCEGroup B0713CB6-A009-4E72-AC09-A9DE823B9F60
+#
+#         #SCE_GROUP:D34811CE-4F87-4B7F-AFAE-826B9310D5AF:::Serviceware
+#
+#         Host bc-climgmt3.pmcs.de
+#           User mbrasch
+#           IdentityFile ~/.ssh/serviceware.id.rsa
+#           #SCEIcon suitcase
+#           #SCEGroup D34811CE-4F87-4B7F-AFAE-826B9310D5AF
+#       '';
+#     };
+#
+#     xdg = {
+#       enable = true;
+#
+#       configHome = "${home_directory}/.config";
+#       dataHome = "${home_directory}/.local/share";
+#       cacheHome = "${home_directory}/.cache";
+#     };
 
-    #     ssh = {
-    #       enable = true;
-    #
-    #       controlMaster = "auto";
-    #       controlPath = "${tmp_directory}/ssh-%u-%r@%h:%p";
-    #       controlPersist = "1800";
-    #
-    #       forwardAgent = true;
-    #       serverAliveInterval = 60;
-    #
-    #       hashKnownHosts = true;
-    #
-    #       extraConfig = ''
-    #         #SCE_GROUP:B0713CB6-A009-4E72-AC09-A9DE823B9F60:::Privat
-    #
-    #         Host BistroServe
-    #           User admin
-    #           HostName bistroserve
-    #           IdentityFile ~/.ssh/private.id.rsa
-    #           #SCEIcon home
-    #           #SCEGroup B0713CB6-A009-4E72-AC09-A9DE823B9F60
-    #
-    #         #SCE_GROUP:D34811CE-4F87-4B7F-AFAE-826B9310D5AF:::Serviceware
-    #
-    #         Host bc-climgmt3.pmcs.de
-    #           User mbrasch
-    #           IdentityFile ~/.ssh/serviceware.id.rsa
-    #           #SCEIcon suitcase
-    #           #SCEGroup D34811CE-4F87-4B7F-AFAE-826B9310D5AF
-    #       '';
-    #     };
   };
 
-  #   xdg = {
-  #     enable = true;
-  #
-  #     configHome = "${home_directory}/.config";
-  #     dataHome = "${home_directory}/.local/share";
-  #     cacheHome = "${home_directory}/.cache";
-  #   };
 }
