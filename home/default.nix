@@ -103,7 +103,7 @@ in rec {
       openssh
       mtr                             # A network diagnostics tool
       nmap                            # A free and open source utility for network discovery and security auditing
-      ncat                            # A free and open source utility for network discovery and security auditing
+      nmap                            # A free and open source utility for network discovery and security auditing
       #ntopng                         # High-speed web-based traffic analysis and flow collection tool   –>   build error: comparison between pointer and integer ('char *' and 'char')
       #nethogs                        # A small 'net top' tool, grouping bandwidth by process (not darwin)
       #nload                          # Monitors network traffic and bandwidth usage with ncurses graphs   –>   linux only
@@ -122,7 +122,6 @@ in rec {
       #p0f                            # Passive network reconnaissance and fingerprinting tool   –>   failed with exit code 2;
       #endlessh                       # SSH tarpit that slowly sends an endless banner
       #duplicati                      # A free backup client that securely stores encrypted, incremental, compressed backups on cloud storage services and remote file servers
-      wireguard                       # Tools for the WireGuard secure network tunnel
       #wireguard-go                   # Userspace Go implementation of WireGuard
       #boringtun                      # Userspace WireGuard® implementation in Rust
       wireguard-tools                 # Tools for the WireGuard secure network tunnel

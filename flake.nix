@@ -86,6 +86,7 @@
       # ----------------------------------------------------------------------------------------------------
 
       nixosConfigurations = {
+        # basis configuration for everything
         bootstrap = home-manager.lib.homeManagerConfiguration {
           system = "x86_64-linux";
           stateVersion = homeManagerStateVersion;
@@ -97,7 +98,7 @@
           };
         };
 
-
+        # configuration for homeserver
         bistroserve = home-manager.lib.homeManagerConfiguration {
           system = "x86_64-linux";
           stateVersion = homeManagerStateVersion;
@@ -109,6 +110,7 @@
           };
         };
 
+        # configuration for vm
         # nixos-vm = mkVM "vm-intel" rec {
         #   inherit nixpkgs home-manager overlays;
         #   system = "x86_64-linux";
@@ -118,10 +120,10 @@
 
       # ----------------------------------------------------------------------------------------------------
 
-      # darwinModules = { };
+      darwinModules = { };
 
       homeManagerModules = {
-        awscli = import ./modules/home/programs/awscli.nix;
+        #awscli = import ./home/modules/programs/awscli.nix;
       };
 
       # `nix develop`

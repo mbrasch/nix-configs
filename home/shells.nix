@@ -1,5 +1,11 @@
-{ config, pkgs, lib, ... }: {
-  home.packages = with pkgs; [ pure-prompt ];
+{ config, pkgs, lib, ... }:
+let
+  zsh-config = "${config.home.homeDirectory}/.config/";
+
+in {
+  home.packages = with pkgs; [
+    #pure-prompt
+  ];
 
   programs.zsh = {
     enable = true;
@@ -11,7 +17,7 @@
     autocd = true;
 
     history = {
-      path = ".config/zsh/zsh_history";
+      path = "${config.programs.zsh.dotDir}/zsh_history";
       expireDuplicatesFirst = true; # Expire duplicates first.
       extended = true; # Save timestamp into the history file.
       ignoreDups = true; # Do not enter command lines into the history list if they are duplicates of the previous event.
@@ -51,8 +57,7 @@
     # An attribute set that maps aliases (the top level attribute names in this option) to command strings or directly to build outputs.
     shellAliases = {
       ll = "ls -lG";
-      #nix-upgrade = "sudo -i sh -c 'nix-channel --update && nix-env -iA nixpkgs.nix && launchctl remove org.nixos.nix-daemon && launchctl load /Library/LaunchDaemons/org.nixos.nix-daemon.plist'";
-      #ns = "nix search pkgs";   # error: cannot find flake 'flake:pkgs' in the flake registries
+      ns = "nix search nixpkgs";   # error: cannot find flake 'flake:pkgs' in the flake registries
     };
 
     # Similar to opt-programs.zsh.shellAliases, but are substituted anywhere on a line.
