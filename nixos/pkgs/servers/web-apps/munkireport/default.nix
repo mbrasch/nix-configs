@@ -1,4 +1,4 @@
-{ pkgs, stdenv, lib, fetchFromGitHub, dataDir ? "/var/lib/munki" }:
+{ pkgs, stdenv, lib, fetchFromGitHub, dataDir ? "/var/lib/munkireport" }:
 
 let
   package = (import ./composition.nix {
@@ -15,25 +15,26 @@ let
   });
 
 in package.override rec {
-  pname = "Munki";
-  version = "5.6.3";
+  pname = "munkireport-php";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
-    owner = "munki";
+    owner = "munkireport";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1bfwpvawa3pxpdsdbi3nxpjpdv2z1jmv7nk6cs9gs0210jlairsz";
+    sha256 = "";
   };
 
   meta = with lib; {
-    description = "A platform to create documentation/wiki content built with PHP & Laravel";
+    description = "MunkiReport is a reporting client for macOS.";
     longDescription = ''
-      A platform for storing and organising information and documentation.
-      Details for BookStack can be found on the official website at https://www.bookstackapp.com/.
+      MunkiReport is a reporting client for macOS. While originally dependent on Munki,
+      MunkiReport is now able to run stand-alone or to be coupled with Munki, Jamf or
+      other macOS management solutions.
     '';
-    homepage = "https://www.munki.org/munki/";
+    homepage = "https://github.com/munkireport/munkireport-php";
     license = licenses.mit;
-    maintainers = with maintainers; [ ymarkus ];
+    maintainers = with maintainers; [ mbrasch ];
     platforms = platforms.linux;
   };
 }

@@ -38,7 +38,7 @@ in rec {
       #disnixos                        # Provides complementary NixOS infrastructure deployment to Disnix
       #dysnomia                        # Automated deployment of mutable components and services for Disnix
 
-      nixopsUnstable                  # NixOS cloud provisioning and deployment tool
+      #nixopsUnstable                  # NixOS cloud provisioning and deployment tool
       #nixops-dns                      # DNS server for resolving NixOps machines
       morph
       lorri                           # Your project's nix-env
@@ -47,6 +47,8 @@ in rec {
       nixpkgs-lint                    # A utility for Nixpkgs contributors to check Nixpkgs for common errors
       nixpkgs-fmt                     # Nix code formatter for nixpkgs
       nixpkgs-review                  # Review pull-requests on https://github.com/NixOS/nixpkgs
+
+      nixos-generators
 
       ##### containerization stuff #####
 
@@ -92,11 +94,19 @@ in rec {
       fd                              # find
       bat                             # cat
       exa                             # ls
+      lsd                             # ls
       procs                           # ps
+      broot                           # tree
       sd                              # sed
       #dust                           # du   ->   runtime error: -jit/bin/pixie-vm: No such file or directory
       ripgrep                         # grep
       hyperfine                       # benchmarking (-> time)
+      glances                         # top
+      gtop                            # top
+      gping                           # ping
+      xh                              # HTTPie, sending http requests
+      dog                             # dig
+
 
       ##### network stuff #####
 
