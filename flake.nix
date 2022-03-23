@@ -120,12 +120,12 @@
         #   user = "admin";
         # };
 
-        nixos-vm = nixos-generators.nixosGenerate {
-          inherit nixpkgs;
-          inherit system;
-          modules = [ ./nixos/hosts/nixos-vm/configuration.nix ];
-          format = "virtualbox";
-          #system = "x86_64-linux";
+        packages.x86_64-linux = {
+          nixos-vm = nixos-generators.nixosGenerate {
+            inherit nixpkgs;
+            modules = [ ./nixos/hosts/nixos-vm/configuration.nix ];
+            format = "vmware";
+          };
         };
       };
 
