@@ -122,9 +122,10 @@
 
         nixos-vm = nixos-generators.nixosGenerate {
           inherit nixpkgs;
+          inherit system;
           modules = [ ./nixos/hosts/nixos-vm/configuration.nix ];
           format = "virtualbox";
-          system = "x86_64-linux";
+          #system = "x86_64-linux";
         };
       };
 
