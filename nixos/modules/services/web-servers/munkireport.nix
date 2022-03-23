@@ -3,8 +3,8 @@
 with lib;
 
 let
-  cfg = config.services.bookstack;
-  bookstack = pkgs.bookstack.override {
+  cfg = config.services.munkireport;
+  munkireport = pkgs.munkireport.override {
     dataDir = cfg.dataDir;
   };
   db = cfg.database;
@@ -14,9 +14,9 @@ let
   group = cfg.group;
 
   # shell script for local administration
-  artisan = pkgs.writeScriptBin "bookstack" ''
+  artisan = pkgs.writeScriptBin "munkireport" ''
     #! ${pkgs.runtimeShell}
-    cd ${bookstack}
+    cd ${munkireport}
     sudo=exec
     if [[ "$USER" != ${user} ]]; then
       sudo='exec /run/wrappers/bin/sudo -u ${user}'
@@ -28,23 +28,23 @@ let
 
 in {
   imports = [
-    (mkRemovedOptionModule [ "services" "bookstack" "extraConfig" ] "Use services.bookstack.config instead.")
-    (mkRemovedOptionModule [ "services" "bookstack" "cacheDir" ] "The cache directory is now handled automatically.")
+    (mkRemovedOptionModule [ "services" "munkireport" "extraConfig" ] "Use services.munkireport.config instead.")
+    (mkRemovedOptionModule [ "services" "munkireport" "cacheDir" ] "The cache directory is now handled automatically.")
   ];
 
-  options.services.bookstack = {
+  options.services.munkireport = {
 
-    enable = mkEnableOption "BookStack";
+    enable = mkEnableOption "munkireport";
 
     user = mkOption {
-      default = "bookstack";
-      description = "User bookstack runs as.";
+      default = "munkireport";
+      description = "User munkireport runs as.";
       type = types.str;
     };
 
     group = mkOption {
-      default = "bookstack";
-      description = "Group bookstack runs as.";
+      default = "munkireport";
+      description = "Group munkireport runs as.";
       type = types.str;
     };
 
@@ -54,7 +54,7 @@ in {
         base64 encoded key used for encryption where needed. Can be
         generated with <code>head -c 32 /dev/urandom | base64</code>.
       '';
-      example = "/run/keys/bookstack-appkey";
+      example = "/run/keys/munkireport-appkey";
       type = types.path;
     };
 
@@ -65,16 +65,16 @@ in {
                 else
                   config.networking.hostName;
       defaultText = lib.literalExpression "config.networking.fqdn";
-      example = "bookstack.example.com";
+      example = "munkireport.example.com";
       description = ''
-        The hostname to serve BookStack on.
+        The hostname to serve munkireport on.
       '';
     };
 
     appURL = mkOption {
       description = ''
-        The root URL that you want to host BookStack on. All URLs in BookStack will be generated using this value.
-        If you change this in the future you may need to run a command to update stored URLs in the database. Command example: <code>php artisan bookstack:update-url https://old.example.com https://new.example.com</code>
+        The root URL that you want to host munkireport on. All URLs in munkireport will be generated using this value.
+        If you change this in the future you may need to run a command to update stored URLs in the database. Command example: <code>php artisan munkireport:update-url https://old.example.com https://new.example.com</code>
       '';
       default = "http${lib.optionalString tlsEnabled "s"}://${cfg.hostname}";
       defaultText = ''http''${lib.optionalString tlsEnabled "s"}://''${cfg.hostname}'';
@@ -83,8 +83,8 @@ in {
     };
 
     dataDir = mkOption {
-      description = "BookStack data directory";
-      default = "/var/lib/bookstack";
+      description = "munkireport data directory";
+      default = "/var/lib/munkireport";
       type = types.path;
     };
 
@@ -101,7 +101,7 @@ in {
       };
       name = mkOption {
         type = types.str;
-        default = "bookstack";
+        default = "munkireport";
         description = "Database name.";
       };
       user = mkOption {
@@ -113,7 +113,7 @@ in {
       passwordFile = mkOption {
         type = with types; nullOr path;
         default = null;
-        example = "/run/keys/bookstack-dbpassword";
+        example = "/run/keys/munkireport-dbpassword";
         description = ''
           A file containing the password corresponding to
           <option>database.user</option>.
@@ -144,24 +144,24 @@ in {
       };
       fromName = mkOption {
         type = types.str;
-        default = "BookStack";
+        default = "munkireport";
         description = "Mail \"from\" name.";
       };
       from = mkOption {
         type = types.str;
-        default = "mail@bookstackapp.com";
+        default = "mail@munkireportapp.com";
         description = "Mail \"from\" email.";
       };
       user = mkOption {
         type = with types; nullOr str;
         default = null;
-        example = "bookstack";
+        example = "munkireport";
         description = "Mail username.";
       };
       passwordFile = mkOption {
         type = with types; nullOr path;
         default = null;
-        example = "/run/keys/bookstack-mailpassword";
+        example = "/run/keys/munkireport-mailpassword";
         description = ''
           A file containing the password corresponding to
           <option>mail.user</option>.
@@ -192,7 +192,7 @@ in {
         "pm.max_requests" = 500;
       };
       description = ''
-        Options for the bookstack PHP pool. See the documentation on <literal>php-fpm.conf</literal>
+        Options for the munkireport PHP pool. See the documentation on <literal>php-fpm.conf</literal>
         for details on configuration directives.
       '';
     };
@@ -206,7 +206,7 @@ in {
       example = literalExpression ''
         {
           serverAliases = [
-            "bookstack.''${config.networking.domain}"
+            "munkireport.''${config.networking.domain}"
           ];
           # To enable encryption and let let's encrypt take care of certificate
           forceSSL = true;
@@ -250,17 +250,17 @@ in {
           AUTH_METHOD = "oidc";
           OIDC_NAME = "MyLogin";
           OIDC_DISPLAY_NAME_CLAIMS = "name";
-          OIDC_CLIENT_ID = "bookstack";
+          OIDC_CLIENT_ID = "munkireport";
           OIDC_CLIENT_SECRET = {_secret = "/run/keys/oidc_secret"};
           OIDC_ISSUER = "https://keycloak.example.com/auth/realms/My%20Realm";
           OIDC_ISSUER_DISCOVER = true;
         }
       '';
       description = ''
-        BookStack configuration options to set in the
+        munkireport configuration options to set in the
         <filename>.env</filename> file.
 
-        Refer to <link xlink:href="https://www.bookstackapp.com/docs/"/>
+        Refer to <link xlink:href="https://www.munkireportapp.com/docs/"/>
         for details on supported values.
 
         Settings containing secret data should be set to an attribute
@@ -280,14 +280,14 @@ in {
 
     assertions = [
       { assertion = db.createLocally -> db.user == user;
-        message = "services.bookstack.database.user must be set to ${user} if services.bookstack.database.createLocally is set true.";
+        message = "services.munkireport.database.user must be set to ${user} if services.munkireport.database.createLocally is set true.";
       }
       { assertion = db.createLocally -> db.passwordFile == null;
-        message = "services.bookstack.database.passwordFile cannot be specified if services.bookstack.database.createLocally is set to true.";
+        message = "services.munkireport.database.passwordFile cannot be specified if services.munkireport.database.createLocally is set to true.";
       }
     ];
 
-    services.bookstack.config = {
+    services.munkireport.config = {
       APP_KEY._secret = cfg.appKeyFile;
       APP_URL = cfg.appURL;
       DB_HOST = db.host;
@@ -303,11 +303,11 @@ in {
       MAIL_ENCRYPTION = mail.encryption;
       DB_PASSWORD._secret = db.passwordFile;
       MAIL_PASSWORD._secret = mail.passwordFile;
-      APP_SERVICES_CACHE = "/run/bookstack/cache/services.php";
-      APP_PACKAGES_CACHE = "/run/bookstack/cache/packages.php";
-      APP_CONFIG_CACHE = "/run/bookstack/cache/config.php";
-      APP_ROUTES_CACHE = "/run/bookstack/cache/routes-v7.php";
-      APP_EVENTS_CACHE = "/run/bookstack/cache/events.php";
+      APP_SERVICES_CACHE = "/run/munkireport/cache/services.php";
+      APP_PACKAGES_CACHE = "/run/munkireport/cache/packages.php";
+      APP_CONFIG_CACHE = "/run/munkireport/cache/config.php";
+      APP_ROUTES_CACHE = "/run/munkireport/cache/routes-v7.php";
+      APP_EVENTS_CACHE = "/run/munkireport/cache/events.php";
       SESSION_SECURE_COOKIE = tlsEnabled;
     };
 
@@ -324,7 +324,7 @@ in {
       ];
     };
 
-    services.phpfpm.pools.bookstack = {
+    services.phpfpm.pools.munkireport = {
       inherit user;
       inherit group;
       phpOptions = ''
@@ -345,14 +345,14 @@ in {
       recommendedOptimisation = true;
       recommendedGzipSettings = true;
       virtualHosts.${cfg.hostname} = mkMerge [ cfg.nginx {
-        root = mkForce "${bookstack}/public";
+        root = mkForce "${munkireport}/public";
         locations = {
           "/" = {
             index = "index.php";
             tryFiles = "$uri $uri/ /index.php?$query_string";
           };
           "~ \.php$".extraConfig = ''
-            fastcgi_pass unix:${config.services.phpfpm.pools."bookstack".socket};
+            fastcgi_pass unix:${config.services.phpfpm.pools."munkireport".socket};
           '';
           "~ \.(js|css|gif|png|ico|jpg|jpeg)$" = {
             extraConfig = "expires 365d;";
@@ -361,24 +361,24 @@ in {
       }];
     };
 
-    systemd.services.bookstack-setup = {
-      description = "Preperation tasks for BookStack";
-      before = [ "phpfpm-bookstack.service" ];
+    systemd.services.munkireport-setup = {
+      description = "Preperation tasks for munkireport";
+      before = [ "phpfpm-munkireport.service" ];
       after = optional db.createLocally "mysql.service";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
         User = user;
-        WorkingDirectory = "${bookstack}";
-        RuntimeDirectory = "bookstack/cache";
+        WorkingDirectory = "${munkireport}";
+        RuntimeDirectory = "munkireport/cache";
         RuntimeDirectoryMode = 0700;
       };
       path = [ pkgs.replace-secret ];
       script =
         let
           isSecret = v: isAttrs v && v ? _secret && isString v._secret;
-          bookstackEnvVars = lib.generators.toKeyValue {
+          munkireportEnvVars = lib.generators.toKeyValue {
             mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
               mkValueString = v: with builtins;
                 if isInt         v then toString v
@@ -395,7 +395,7 @@ in {
           '';
           secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
           filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ {} null ])) cfg.config;
-          bookstackEnv = pkgs.writeText "bookstack.env" (bookstackEnvVars filteredConfig);
+          munkireportEnv = pkgs.writeText "munkireport.env" (munkireportEnvVars filteredConfig);
         in ''
         # error handling
         set -euo pipefail
@@ -404,7 +404,7 @@ in {
         umask 077
 
         # create .env file
-        install -T -m 0600 -o ${user} ${bookstackEnv} "${cfg.dataDir}/.env"
+        install -T -m 0600 -o ${user} ${munkireportEnv} "${cfg.dataDir}/.env"
         ${secretReplacements}
         if ! grep 'APP_KEY=base64:' "${cfg.dataDir}/.env" >/dev/null; then
             sed -i 's/APP_KEY=/APP_KEY=base64:/' "${cfg.dataDir}/.env"
@@ -431,19 +431,19 @@ in {
     ];
 
     users = {
-      users = mkIf (user == "bookstack") {
-        bookstack = {
+      users = mkIf (user == "munkireport") {
+        munkireport = {
           inherit group;
           isSystemUser = true;
         };
         "${config.services.nginx.user}".extraGroups = [ group ];
       };
-      groups = mkIf (group == "bookstack") {
-        bookstack = {};
+      groups = mkIf (group == "munkireport") {
+        munkireport = {};
       };
     };
 
   };
 
-  meta.maintainers = with maintainers; [ ymarkus ];
+  meta.maintainers = with maintainers; [ mbrasch ];
 }

@@ -113,7 +113,6 @@ in rec {
       openssh
       mtr                             # A network diagnostics tool
       nmap                            # A free and open source utility for network discovery and security auditing
-      nmap                            # A free and open source utility for network discovery and security auditing
       #ntopng                         # High-speed web-based traffic analysis and flow collection tool   –>   build error: comparison between pointer and integer ('char *' and 'char')
       #nethogs                        # A small 'net top' tool, grouping bandwidth by process (not darwin)
       #nload                          # Monitors network traffic and bandwidth usage with ncurses graphs   –>   linux only
