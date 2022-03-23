@@ -21,7 +21,7 @@
     flake-compat.flake = false;
   };
 
-  outputs = { self, nixpkgs-unstable, darwin, home-manager, nixos-generators, nur, flake-utils, ... }@inputs:
+  outputs = { self, nixpkgs, darwin, home-manager, nixos-generators, nur, flake-utils, ... }@inputs:
     let
       inherit (darwin.lib) darwinSystem;
       inherit (inputs.nixpkgs-unstable.lib) attrValues makeOverridable optionalAttrs singleton;
@@ -121,9 +121,10 @@
         # };
 
         nixos-vm = nixos-generators.nixosGenerate {
-          inherit nixpkgs-unstable;
+          inherit nixpkgs;
           modules = [ ./nixos/hosts/nixos-vm/configuration.nix ];
           format = "virtualbox";
+          system = "x86_64-linux";
         };
       };
 
