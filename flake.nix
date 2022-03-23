@@ -122,7 +122,7 @@
 
         packages.x86_64-linux = {
           nixos-vm = nixos-generators.nixosGenerate {
-            inherit nixpkgs;
+            pkgs = nixpkgs.legacyPackages.x86_64-linux;
             modules = [ ./nixos/hosts/nixos-vm/configuration.nix ];
             format = "vmware";
           };
