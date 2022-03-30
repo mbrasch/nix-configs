@@ -24,7 +24,7 @@
   outputs = { self, nixpkgs, darwin, home-manager, nixos-generators, nur, flake-utils, ... }@inputs:
     let
       inherit (darwin.lib) darwinSystem;
-      inherit (inputs.nixpkgs-unstable.lib) attrValues makeOverridable optionalAttrs singleton;
+      inherit (inputs.nixpkgs.lib) attrValues makeOverridable optionalAttrs singleton;
 
       systems = [ "x86_64-darwin" "x86_64-linux" ];
       forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system);
@@ -113,13 +113,13 @@
           };
         };
 
-        # packages.x86_64-linux = {
-        #   nixos-vm = nixos-generators.nixosGenerate {
-        #     pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        #     modules = [ ./nixos/hosts/nixos-vm/configuration.nix ];
-        #     format = "vmware";
-        #   };
-        # };
+        packages.x86_64-linux = {
+          nixos-vm = nixos-generators.nixosGenerate {
+            pkgs = nixpkgs.legacyPackages.x86_64-linux;
+            modules = [ ./nixos/hosts/nixos-vm/configuration.nix ];
+            format = "vmware";
+          };
+        };
       };
 
       # ----------------------------------------------------------------------------------------------------
