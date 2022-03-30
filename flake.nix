@@ -2,23 +2,23 @@
   description = "Mike's dotfiles";
 
   inputs = {
-    #nixpkgs-master.url = "github:nixos/nixpkgs/master";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    #nixpkgs-stable.url = "github:nixos/nixpkgs/nixpkgs-21.11-darwin";
-    nixos-stable.url = "github:nixos/nixpkgs/nixos-21.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixos.url = "github:nixos/nixpkgs/nixos-21.11";
 
     darwin.url = "github:LnL7/nix-darwin";
-    darwin.inputs.nixpkgs.follows = "nixpkgs-unstable";
+    darwin.inputs.nixpkgs.follows = "nixpkgs";
+
     home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs-unstable";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     nixos-generators.url = "github:nix-community/nixos-generators";
-    nixos-generators.inputs.nixpkgs.follows = "nixpkgs-unstable";
+    nixos-generators.inputs.nixpkgs.follows = "nixpkgs";
+
+    flake-compat.url = "github:edolstra/flake-compat";
+    flake-compat.flake = false;
 
     nur.url = "github:nix-community/NUR";
     flake-utils.url = "github:numtide/flake-utils";
-    flake-compat.url = "github:edolstra/flake-compat";
-    flake-compat.flake = false;
   };
 
   outputs = { self, nixpkgs, darwin, home-manager, nixos-generators, nur, flake-utils, ... }@inputs:
@@ -62,7 +62,7 @@
       darwinConfigurations = {
 
         # Minimal configuration to bootstrap darwin systems
-        bootstrap = makeOverridable darwinSystem {
+        bootstrap-darwin = makeOverridable darwinSystem {
           system = "x86_64-darwin";
           modules = [ ./darwin/bootstrap.nix { nixpkgs = nixpkgsConfig; } ];
         };
@@ -77,20 +77,20 @@
         };
 
         # Configuration used for CI with GitHub actions
-        githubActions = darwinSystem {
-          system = "x86_64-darwin";
-          modules = nixDarwinCommonModules {
-            user = "runner";
-            host = "github-actions";
-          };
-        };
+        # githubActions = darwinSystem {
+        #   system = "x86_64-darwin";
+        #   modules = nixDarwinCommonModules {
+        #     user = "runner";
+        #     host = "github-actions";
+        #   };
+        # };
       };
 
       # ----------------------------------------------------------------------------------------------------
 
       nixosConfigurations = {
-        # basis configuration for everything
-        bootstrap = home-manager.lib.homeManagerConfiguration {
+        # minimal configuration
+        bootstrap-nixos = home-manager.lib.homeManagerConfiguration {
           system = "x86_64-linux";
           stateVersion = homeManagerStateVersion;
           homeDirectory = "/home/admin";
@@ -113,20 +113,13 @@
           };
         };
 
-        # configuration for vm
-        # nixos-vm = mkVM "vm-intel" rec {
-        #   inherit nixpkgs home-manager overlays;
-        #   system = "x86_64-linux";
-        #   user = "admin";
+        # packages.x86_64-linux = {
+        #   nixos-vm = nixos-generators.nixosGenerate {
+        #     pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        #     modules = [ ./nixos/hosts/nixos-vm/configuration.nix ];
+        #     format = "vmware";
+        #   };
         # };
-
-        packages.x86_64-linux = {
-          nixos-vm = nixos-generators.nixosGenerate {
-            pkgs = nixpkgs.legacyPackages.x86_64-linux;
-            modules = [ ./nixos/hosts/nixos-vm/configuration.nix ];
-            format = "vmware";
-          };
-        };
       };
 
       # ----------------------------------------------------------------------------------------------------
