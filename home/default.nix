@@ -83,6 +83,7 @@ in rec {
       antibody                        # shell plugin manager
       mosh                            # mobile shell
       shellcheck
+      shfmt
       #fish
 
       ###### services stuff ######

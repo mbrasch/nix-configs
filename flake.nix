@@ -33,6 +33,8 @@
         config = { allowUnfree = true; };
       };
 
+      mkVM = import ./lib/mkvm.nix;
+
       # Home Manager configuration shared between all different configurations.
       homeManagerStateVersion = "22.05";
       homeManagerCommonConfig = { user, userConfig ? ./home + "/users/${user}.nix", ... }: {
@@ -113,13 +115,11 @@
           };
         };
 
-        #packages.x86_64-linux = {
-          nixos-vm = nixos-generators.nixosGenerate {
-            pkgs = nixpkgs.legacyPackages.x86_64-linux;
-            modules = [ ./nixos/hosts/nixos-vm/configuration.nix ];
-            format = "vmware";
-          };
-        #};
+        nixosConfigurations.vm-intel = mkVM "nixos-vm" rec {
+          inherit nixpkgs home-manager;
+          system = "x86_64-linux";
+          user   = "mbrasch";
+        };
       };
 
       # ----------------------------------------------------------------------------------------------------
