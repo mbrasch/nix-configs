@@ -115,7 +115,7 @@
           };
         };
 
-        nixosConfigurations.vm-intel = mkVM "nixos-vm" rec {
+        nixosConfigurations.nixos-vm = mkVM "nixos-vm" rec {
           inherit nixpkgs home-manager;
           system = "x86_64-linux";
           user   = "mbrasch";
