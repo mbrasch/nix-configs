@@ -63,14 +63,45 @@ fi
 ## NixOS
 
 ### Initial install
-From running NixOS installer or NixOS System run:
+
+#### Prepare filesystems
 ```
+export DISK=/dev/sda
+export PARTPREFIX=""
+
+# create partitions
+sgdisk --zap-all "${DISK}"
+sgdisk -n3:1M:+512M -t3:EF00 "${DISK}
+sgdisk -n1:0:0 -t1:BF01 "${DISK}"
+
+# create zpool
+zpool create -O mountpoint=none -O atime=off -O compression=lz4 -O xattr=sa -O acltype=posixacl -o ashift=12 -R /mnt rpool "${DISK}${PARTPREFIX}1"
+
+# create filesystems
+zfs create -o mountpoint=none rpool/root
+zfs create -o mountpoint=legacy rpool/root/nixos
+zfs create -o mountpoint=legacy rpool/home
+
+# mount filesystems
+mount -t zfs rpool/root/nixos /mnt
+mkdir /mnt/home
+mount -t zfs rpool/home /mnt/home
+
+# create EFI partition
+mkfs.vfat "${DISK}${PARTPREFIX}3"
+mkdir /mnt/boot
+mount "${DISK}${PARTPREFIX}3" /mnt/boot
+```
+
+#### Install NixOS
+```
+nix-env -iA nixUnstable    # for flake support
 nixos-install --flake github:mbrasch/nix-configs#nixosConfigurations.bootstrap.system
 ```
 
 ### Regular use
 ```
-nixos-rebuild switch --flake github:mbrasch/nix-configs#bistroserve
+nixos-rebuild switch --impure --flake github:mbrasch/nix-configs#bistroserve
 ```
 
 

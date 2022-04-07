@@ -1,6 +1,8 @@
 #!/run/current-system/sw/bin/bash
 
 #DISK=/dev/disk/by-id/ata-Samsung_SSD_850_EVO_500GB_S2RBNX0J333616J
+DISK=/dev/sda
+PARTPREFIX="" # "${PARTPREFIX}"
 
 if [ "$1" = "" ]; then
   echo "Please call this script with /dev/disk/by-id/<disk_to_install_nixos>"
@@ -13,19 +15,19 @@ echo -e " | Are you OK with this?"
 echo -e " | Press ENTER to going further or CTRL+C to abort."
 read -r _
 echo -e "zapping…"
-sgdisk --zap-all "$DISK"
+sgdisk --zap-all "${DISK}"
 
 # I DID NOT create partition 2 since I don't need legacy (BIOS) boot
 # Partition 2 will be the boot partition, needed for legacy (BIOS) boot
-# sgdisk -a1 -n2:34:2047 -t2:EF02 $DISK
+# sgdisk -a1 -n2:34:2047 -t2:EF02 ${DISK}
 
 # If you need EFI support, make an EFI partition:
 echo -e "creating EFI partition…"
-sgdisk -n3:1M:+512M -t3:EF00 "$DISK"
+sgdisk -n3:1M:+512M -t3:EF00 "${DISK}"
 
 # Partition 1 will be the main ZFS partition, using up the remaining space on the drive.
 echo -e "creating ZFS partition…"
-sgdisk -n1:0:0 -t1:BF01 "$DISK"
+sgdisk -n1:0:0 -t1:BF01 "${DISK}"
 
 # Create the pool. If you want to tweak this a bit and you're feeling adventurous, you
 # might try adding one or more of the following additional options:
@@ -45,7 +47,7 @@ sgdisk -n1:0:0 -t1:BF01 "$DISK"
 # normal fstab-based mounting machinery in Linux.
 # '-R /mnt' is not a persistent property of the FS, it'll just be used while we're installing.
 echo -e "creating zpool…"
-zpool create -O mountpoint=none -O atime=off -O compression=lz4 -O xattr=sa -O acltype=posixacl -o ashift=12 -R /mnt rpool "$DISK-part1"
+zpool create -O mountpoint=none -O atime=off -O compression=lz4 -O xattr=sa -O acltype=posixacl -o ashift=12 -R /mnt rpool "${DISK}${PARTPREFIX}1"
 
 # Create the filesystems. This layout is designed so that /home is separate from the root
 # filesystem, as you'll likely want to snapshot it differently for backup purposes. It also
@@ -65,12 +67,13 @@ mount -t zfs rpool/home /mnt/home
 
 # If you need to boot EFI, you'll need to set up /boot as a non-ZFS partition.
 echo -e "creating EFI boot partition…"
-mkfs.vfat "$DISK-part3"
+mkfs.vfat "${DISK}${PARTPREFIX}3"
 mkdir /mnt/boot
-mount "$DISK-part3" /mnt/boot
+mount "${DISK}${PARTPREFIX}3" /mnt/boot
 
 echo -e "Now you are ready to nixos-install your system."
 
-nixos-generate-config --root /mnt
+nix-env -iA nixos.nixUnstable
+#nixos-generate-config --root /mnt
 #nano /mnt/etc/nixos/configuration.nix
 #nixos-install
