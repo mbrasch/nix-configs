@@ -115,10 +115,12 @@
           };
         };
 
-        nixosConfigurations.nixos-vm = mkVM "nixos-vm" rec {
-          inherit nixpkgs home-manager;
-          system = "x86_64-linux";
-          user   = "mbrasch";
+        nixos-vm = nixos-generators.nixosGenerate {
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+          modules = [
+            ./nixos/hosts/nixos-vm/configuration.nix
+          ];
+          format = "vmware";
         };
       };
 

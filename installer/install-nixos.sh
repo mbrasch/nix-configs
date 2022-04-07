@@ -13,7 +13,7 @@ echo -e " | Are you OK with this?"
 echo -e " | Press ENTER to going further or CTRL+C to abort."
 read -r _
 echo -e "zapping…"
-sgdisk --zap-all $DISK
+sgdisk --zap-all "$DISK"
 
 # I DID NOT create partition 2 since I don't need legacy (BIOS) boot
 # Partition 2 will be the boot partition, needed for legacy (BIOS) boot
@@ -21,11 +21,11 @@ sgdisk --zap-all $DISK
 
 # If you need EFI support, make an EFI partition:
 echo -e "creating EFI partition…"
-sgdisk -n3:1M:+512M -t3:EF00 $DISK
+sgdisk -n3:1M:+512M -t3:EF00 "$DISK"
 
 # Partition 1 will be the main ZFS partition, using up the remaining space on the drive.
 echo -e "creating ZFS partition…"
-sgdisk -n1:0:0 -t1:BF01 $DISK
+sgdisk -n1:0:0 -t1:BF01 "$DISK"
 
 # Create the pool. If you want to tweak this a bit and you're feeling adventurous, you
 # might try adding one or more of the following additional options:
@@ -72,5 +72,5 @@ mount "$DISK-part3" /mnt/boot
 echo -e "Now you are ready to nixos-install your system."
 
 nixos-generate-config --root /mnt
-nano /mnt/etc/nixos/configuration.nix
-nixos-install
+#nano /mnt/etc/nixos/configuration.nix
+#nixos-install
