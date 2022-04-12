@@ -1,4 +1,4 @@
-#!/run/current-system/sw/bin/bash
+#!/bin/bash
 
 #DISK=/dev/disk/by-id/ata-Samsung_SSD_850_EVO_500GB_S2RBNX0J333616J
 DISK=/dev/sda
