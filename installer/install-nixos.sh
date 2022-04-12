@@ -77,4 +77,3 @@ nix-env -iA nixos.nixUnstable
 nixos-generate-config --root /mnt
 nano /mnt/etc/nixos/configuration.nix
 nixos-install
-reboot
