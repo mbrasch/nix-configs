@@ -75,6 +75,6 @@ echo -e "Now you are ready to nixos-install your system."
 
 nix-env -iA nixos.nixUnstable
 nixos-generate-config --root /mnt
-#nano /mnt/etc/nixos/configuration.nix
+nano /mnt/etc/nixos/configuration.nix
 nixos-install
 reboot
