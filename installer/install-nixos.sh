@@ -74,6 +74,7 @@ mount "${DISK}${PARTPREFIX}3" /mnt/boot
 echo -e "Now you are ready to nixos-install your system."
 
 nix-env -iA nixos.nixUnstable
-#nixos-generate-config --root /mnt
+nixos-generate-config --root /mnt
 #nano /mnt/etc/nixos/configuration.nix
-#nixos-install
+nixos-install
+reboot
