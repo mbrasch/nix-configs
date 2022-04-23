@@ -1,29 +1,50 @@
 { config, pkgs, ... }:
 let
-  name = "";
-  email = "";
+  name = "Admin";
+  email = "mike@mbrasch.de";
   key = "";
   home_directory = "${config.home.homeDirectory}";
 
 in {
-  services = {
+  imports = [ ./shells.nix ];
 
-  };
 
-  programs = {
-    # git = {
-    #   userName = "${name}";
-    #   userEmail = "${email}";
-    #   signing = {
-    #     key = "${key}";
-    #     signByDefault = true;
-    #   };
-    #   extraConfig = { github.user = "mbrasch"; };
-    # };
+  #################################################################################################
 
-    nix-index.enable = true;
-    info.enable = true;
-    man.enable = true;
-    #adb.enable = true;
+
+
+  home = {
+    sessionVariables = {
+      EDITOR = "${pkgs.nano}/bin/nano";
+      #EMAIL = "${config.programs.git.userEmail}";
+      PAGER = "${pkgs.less}/bin/less";
+      CLICOLOR = true;
+      GPG_TTY = "$TTY";
+      #PATH = "$PATH:$HOME/.local/bin:$HOME/.tfenv/bin";
+    };
+
+    services = {
+
+    };
+
+    programs = {
+      home-manager = { enable = true; };
+
+      direnv = {
+        enable = true;
+        nix-direnv = { enable = true; };
+      };
+
+      dircolors = {
+        enable = true;
+        enableZshIntegration = true;
+      };
+
+      fzf = {
+        enable = true;
+        enableBashIntegration = true;
+        enableZshIntegration = true;
+      };
+    };
   };
 }

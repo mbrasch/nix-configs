@@ -63,9 +63,17 @@ fi
 ## NixOS
 
 ### Initial install
+```bash
+# following script will prepare sda for installation.
+# it will then let you edit the configuration. after closing the editor, the installation proces will begin immediately.
+sh <(curl -L https://raw.githubusercontent.com/mbrasch/nix-configs/main/installer/install-nixos.sh)
+
+# then edit
+
+```
 
 #### Prepare filesystems
-```
+```bash
 export DISK=/dev/sda
 export PARTPREFIX=""
 

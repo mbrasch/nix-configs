@@ -1,5 +1,6 @@
 {
   "identifier" : "146A2D6B-0208-4F9E-A482-B307A2A5AE8D",
-  "server" : "BistroServe",
+  "remotePath" : "\/etc\/nixos",
+  "server" : "Unbenannter Favorit",
   "usesPublishing" : false
 }

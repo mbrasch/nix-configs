@@ -1,10 +1,8 @@
 {
   "actions" : {
     "run" : {
-      "enabled" : false,
-      "script" : "#!\/bin\/sh\nexport SUDO_ASKPASS=\/usr\/local\/bin\/pw\n\nsudo -A darwin-rebuild switch --flake .#mbrasch\n"
+      "script" : "#!\/bin\/sh\n\ndarwin-rebuild switch --flake .#mbrasch\n"
     }
   },
-  "identifier" : "9B40BA8F-0ED6-484B-B83D-07B61465756F",
   "openLogOnRun" : "start"
 }

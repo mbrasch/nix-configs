@@ -3,7 +3,9 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+
     nixos.url = "github:nixos/nixpkgs/nixos-21.11";
+    nixos-hardware.url = github:NixOS/nixos-hardware/master;
 
     darwin.url = "github:LnL7/nix-darwin";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
@@ -16,9 +18,10 @@
 
     flake-compat.url = "github:edolstra/flake-compat";
     flake-compat.flake = false;
+    flake-utils.url = "github:numtide/flake-utils";
+    nixos-shell.url = "github:Mic92/nixos-shell";
 
     nur.url = "github:nix-community/NUR";
-    flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs = { self, nixpkgs, darwin, home-manager, nixos-generators, nur, flake-utils, ... }@inputs:

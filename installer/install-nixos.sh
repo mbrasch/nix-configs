@@ -18,8 +18,8 @@ echo -e "zapping…"
 sgdisk --zap-all "${DISK}"
 
 # If you need legacy BIOS support
-#echo -e "creating BIOS partition…"
-#sgdisk -a1 -n2:34:2047 -t2:EF02 ${DISK}
+echo -e "creating BIOS partition…"
+sgdisk -a1 -n2:34:2047 -t2:EF02 ${DISK}
 
 # If you need EFI support, make an EFI partition
 echo -e "creating EFI partition…"
