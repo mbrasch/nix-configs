@@ -10,24 +10,12 @@
 
   boot = {
     loader = {
-      grub.enable = true;
-      grub.version = 2;
-      grub.device = "/dev/sda";
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
     };
-
-    kernelParams = [
-      "console=ttyS0,115200"
-      "console=tty1"
-    ];
-
     extraModulePackages = [
       #config.boot.kernelPackages.exfat-nofuse
     ];
-  };
-
-  powerManagement = {
-    enable = true;
-    cpuFreqGovernor = "ondemand"; # "ondemand", "powersave", "performance"
   };
 
   ##############################################################################################################################
@@ -38,11 +26,7 @@
     hostName = "BistroServe";
     hostId = "2a1b5bfb";
     useDHCP = false; # global useDHCP flag is deprecated -> explicitly set to false
-    interfaces.enp1s0.useDHCP = true;
-    interfaces.enp1s0.wakeOnLan.enable = true;
     interfaces.enp2s0.useDHCP = true;
-    interfaces.enp3s0.useDHCP = true;
-    interfaces.enp4s0.useDHCP = true;
     wireless.enable = false;
 
     #proxy = {
@@ -70,38 +54,51 @@
     keyMap = "de";
   };
 
+  sound.enable = true;
+
+  hardware = { opengl.driSupport32Bit = true; };
+
   ##############################################################################################################################
   ##############################################################################################################################
   ##############################################################################################################################
 
-  # generate hashed passwords via: mkpasswd -m sha-512
+  services.xserver = {
+    enable = true;
+    layout = "de";
+    xkbOptions = "eurosign:e";
+    libinput.enable = true; # Enable touchpad support (enabled default in most desktopManager)
 
-  users.users = {
-    root = {
-      hashedPassword = "$6$d2r2kNA..v0aWi8I$hOZJku684D/vwVO6R.3XpJtft.WYsEsrPNuaNetBwnaqOlbqM22rSyaXE72NAcW1.R9vQdaa0OIRZIormYgQT.";
-    };
+    displayManager.sddm.enable = true;
+    desktopManager.plasma5.enable = true;
+  };
 
-    admin = {
-      name = "admin";
-      hashedPassword = "$6$R9iwd0gKNHlnLKfD$7rtv9iHdjhKATmnMqOdcMvfXuPk.PNbraeIq9alURhgAsW6KDEZg50b8k3jGn/A5QM7qKOFM330.8Q7EEyofX0";
-      isNormalUser = true;
-      isSystemUser = false;
-      createHome = true;
-      cryptHomeLuks = null;
-      shell = pkgs.zsh;
-      group = "users";
-      extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-      openssh = {
-        authorizedKeys = {
-          keyFiles = [ ];
-          keys = [ ];
-        };
+  services.pipewire = { enable = true; };
+
+  ##############################################################################################################################
+  ##############################################################################################################################
+  ##############################################################################################################################
+
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.admin = {
+    name = "admin";
+    isNormalUser = true;
+    isSystemUser = false;
+    createHome = true;
+    #home = "/home/admin";
+    cryptHomeLuks = null;
+    shell = pkgs.zsh;
+    group = "users";
+    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    openssh = {
+      authorizedKeys = {
+        keyFiles = [ ];
+        keys = [  ];
       };
-      packages = [ ];
-      pamMount = { };
-      subGidRanges = [ ];
-      subUidRanges = [ ];
     };
+    packages = [ ];
+    pamMount = { };
+    subGidRanges = [ ];
+    subUidRanges = [ ];
   };
 
   ##############################################################################################################################
@@ -120,10 +117,15 @@
     mosh
     git
     sysstat
+    netdata
     bat
     fzf
     fd
     tmux
+    kodi
+    steam
+    firefox
+    plasma5Packages.kdeconnect-kde
     elinks
 
     #node2nix
@@ -156,7 +158,7 @@
         enable = true;
         #extraConfig = {   };
         highlightStyle = "fg=cyan";
-        strategy = [ "completion" ]; # history | completion | match_prev_cmd
+        strategy = "history"; # history | match_prev_cmd
       };
 
       syntaxHighlighting = {
@@ -219,8 +221,10 @@
   ##############################################################################################################################
 
   services = {
+    #vscode-server.enable = true;
+
     xrdp = {
-      enable = false;
+      enable = true;
       defaultWindowManager = "startplasma-x11";
     };
 
@@ -233,7 +237,7 @@
 
     ################################################################################
 
-    printing.enable = false;
+    printing = { enable = false; };
 
     ################################################################################
 
@@ -335,8 +339,8 @@
   ##############################################################################################################################
 
   system = {
-    stateVersion = "21.11"; # Did you read the comment?
-    autoUpgrade.enable = true;
+    stateVersion = "20.09"; # Did you read the comment?
+    autoUpgrade.enable = false;
     autoUpgrade.allowReboot = true;
     autoUpgrade.channel = "https://nixos.org/channels/nixos-unstable";
   };
@@ -362,7 +366,7 @@
   ##############################################################################################################################
 
   nix = {
-    allowedUsers = [ "admin" ];
+    allowedUsers = [ "*" ];
     trustedUsers = [ "root" "@wheel" ];
     autoOptimiseStore = true;
     requireSignedBinaryCaches = true; # RECOMMENDED!!!
@@ -382,7 +386,6 @@
     #envVars = {   };
 
     package = pkgs.nixFlakes;
-
     extraOptions = ''
       experimental-features = nix-command flakes
       builders-use-substitutes = true
@@ -410,13 +413,16 @@
     sandboxPaths = [ ]; # Directories from the host filesystem to be included in the sandbox.
 
     sshServe = {
-      enable = false; # Whether to enable serving the Nix store as a remote store via SSH.
+      enable =
+        false; # Whether to enable serving the Nix store as a remote store via SSH.
       keys = [ ];
-      protocol = "ssh"; # The specific Nix-over-SSH protocol to use: ssh | ssh-ng
+      protocol =
+        "ssh"; # The specific Nix-over-SSH protocol to use: ssh | ssh-ng
     };
 
     #systemFeatures = [   ];		# The supported features of a machine.
-    useSandbox = true; # If set, Nix will perform builds in a sandboxed environment that it will set up automatically for each build.
+    useSandbox =
+      true; # If set, Nix will perform builds in a sandboxed environment that it will set up automatically for each build.
   };
 
   ##############################################################################################################################
@@ -425,7 +431,7 @@
 
   documentation = {
     enable = true;
-    dev.enable = true;
+    dev.enable = false;
     doc.enable = true;
     info.enable = true;
     man.enable = true;
@@ -435,5 +441,120 @@
   ##############################################################################################################################
   ##############################################################################################################################
   ##############################################################################################################################
+
+  # NAT forwarding
+
+  #networking.nat.enable = true;
+  #networking.nat.internalInterfaces = [ "ve-munki" ];   # use "ve-*" to let all virtual interfaces tot the internet
+  #networking.nat.externalInterface = "eth0";
+
+  # reverse proxy
+
+  # security.acme.acceptTerms = true;
+  # security.acme.email = "bistromath@fastmail.fm";
+
+  #  services.nginx = {
+  #    enable = true;
+  #    recommendedProxySettings = true;
+  #    recommendedTlsSettings = true;
+  #    recommendedOptimisation = true;
+  #    recommendedGzipSettings = true;
+
+  #    virtualHosts = {
+  #      "munki.local" = {
+  #       enableACME = false;
+  #       forceSSL = false;
+  #       locations."/".proxyPass = "http://10.192.168.241:80";
+  #      };
+  #    };
+  #  };
+
+  # containers
+
+  #   containers.munki = {
+  #     ephemeral = false;
+  #     autoStart = true;
+  #     #dropCapabilities = ???;
+  #
+  #     privateNetwork = true;       # implicit create a virtual interface and decouple from host
+  #     hostAddress = "10.192.168.231";
+  #     localAddress = "10.192.168.241";
+  #     forwardPorts = [ { protocol = "tcp"; hostPort = 8080; containerPort = 80; } ];
+  #
+  #     config = { config, pkgs, ... }: {
+  #       services.nginx.enable = true;
+  #       #services.nginx.adminAddr = "foo@example.org";
+  #       networking.firewall.allowedTCPPorts = [ 80 ];
+  #       #systemd.tmpfiles.rules = [
+  #       #  "d /var/log/nginx 700 wwwrun wwwrun -"
+  #       #];
+  #     };
+  #
+  #     #bindMounts = {
+  #     #  "/var/log/nginx" = {
+  #     #    hostPath = "/mnt/munkiData/";
+  #     #    isReadOnly = false;
+  #     #  };
+  #     #};
+  #   };
+
+  ##############################################################################################################################
+  ##############################################################################################################################
+  ##############################################################################################################################
+
+  # virtualisation.podman = {
+  #   enable = true;
+  #   dockerCompat = true;
+  # };
+
+  # virtualisation.oci-containers = {
+  #   backend = "podman";
+  #   containers = {
+  #nextcloud = { ########################################################################################
+  #  image = "nextcloud:20.0.4";
+  #  extraOptions = [
+  #    "--ip=10.192.168.50"
+  #    "--add-host=db:10.192.168.51"
+  #  ];
+  #  volumes = [
+  #    "/data/nextcloud/docroot:/var/www/html"
+  #  ];
+  #  environment = {
+  #    POSTGRES_HOST = "db";
+  #    POSTGRES_PORT = "5432";
+  #    POSTGRES_DB = "nextcloud";
+  #    POSTGRES_USER = "";
+  #    POSTGRES_PASSWORD = "";
+  #    TRUSTED_PROXIES = "10.88.10.10";
+  #    NEXTCLOUD_ADMIN_USER = "admin";
+  #    NEXTCLOUD_TRUSTED_DOMAINS = "<domain> 10.192.168.*";
+  #    NEXTCLOUD_ADMIN_PASSWORD = "";
+  #    OBJECTSTORE_S3_HOST = "s3.us-west-001.backblazeb2.com";
+  #    OBJECTSTORE_S3_BUCKET = "this-bucket-does-not-exist";
+  #    OBJECTSTORE_S3_KEY = "";
+  #    OBJECTSTORE_S3_SECRET = "";
+  #    OBJECTSTORE_S3_PORT = "443";
+  #    OBJECTSTORE_S3_SSL = "true";
+  #    OBJECTSTORE_S3_REGION = "us-west-001";
+  #    OBJECTSTORE_S3_USEPATH_STYLE = "false";
+  #  };
+  #};
+
+  #db = { ########################################################################################
+  #  image = "postgres:13.1";
+  #  extraOptions = [
+  #    "--ip=10.88.10.13"
+  #  ];
+  #  environment = {
+  #    POSTGRES_DB = "postgres";
+  #    POSTGRES_USER = "root";
+  #    POSTGRES_PASSWORD = "";
+  #  };
+  #  volumes = [
+  #    "/data/db/postgres:/var/lib/postgresql/data/"
+  #  ];
+  #};
+  #   };
+  # };
 
 }

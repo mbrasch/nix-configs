@@ -63,14 +63,14 @@ fi
 ## NixOS
 
 ### Initial install
+The following script will prepare sda for installation.
+
 ```bash
-# following script will prepare sda for installation.
-# it will then let you edit the configuration. after closing the editor, the installation proces will begin immediately.
 sh <(curl -L https://raw.githubusercontent.com/mbrasch/nix-configs/main/installer/install-nixos.sh)
-
-# then edit
-
 ```
+It will then let you edit the configuration. After closing the editor, the installation process will begin immediately. At the end
+you will be asked for the new root password. Afterwards you can reboot into the new system. **Don't forget to set the passwords for
+the user accounts created.**
 
 #### Prepare filesystems
 ```bash

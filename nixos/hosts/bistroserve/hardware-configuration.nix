@@ -4,48 +4,47 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
-    ];
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+  ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "ahci" "ohci_pci" "ehci_pci" "usb_storage" "sd_mod" "sdhci_pci" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
+  boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    { device = "rpool/root/nixos";
-      fsType = "zfs";
-    };
+  fileSystems."/boot" = {
+    device = "/dev/sda1";
+    fsType = "vfat";
+  };
 
-  fileSystems."/home" =
-    { device = "rpool/home";
-      fsType = "zfs";
-    };
+  fileSystems."/" = {
+    device = "rpool/root/nixos";
+    fsType = "zfs";
+  };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/CD8C-1251";
-      fsType = "vfat";
-    };
+  fileSystems."/home" = {
+    device = "rpool/home";
+    fsType = "zfs";
+  };
 
-  fileSystems."/volumes/Media" =
-    { device = "data/Media";
-      fsType = "zfs";
-    };
+  fileSystems."/volumes/Media" = {
+    device = "data/Media";
+    fsType = "zfs";
+  };
 
-  fileSystems."/volumes/Backups" =
-    { device = "data/Backups";
-      fsType = "zfs";
-    };
+  fileSystems."/volumes/Backups" = {
+    device = "data/Backups";
+    fsType = "zfs";
+  };
 
-  fileSystems."/volumes/Stuff" =
-    { device = "data/Stuff";
-      fsType = "zfs";
-    };
+  fileSystems."/volumes/Stuff" ={
+    device = "data/Stuff";
+    fsType = "zfs";
+  };
 
   swapDevices = [ ];
 
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
-  # high-resolution display
-  hardware.video.hidpi.enable = lib.mkDefault true;
+  powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
+  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
