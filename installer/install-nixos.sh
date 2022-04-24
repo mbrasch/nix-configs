@@ -64,9 +64,14 @@ mkfs.vfat "${DISK}${PARTPREFIX}3"
 mkdir /mnt/boot
 mount "${DISK}${PARTPREFIX}3" /mnt/boot
 
-echo -e "Now you are ready to nixos-install your system."
-
+echo -e "Installing nix unstable…"
 nix-env -iA nixos.nixUnstable
-nixos-generate-config --root /mnt
-nano /mnt/etc/nixos/configuration.nix
-nixos-install
+
+#echo -e "Generating config…"
+#nixos-generate-config --root /mnt
+
+echo -e "Cloning configuration from git…"
+git clone https://github.com/mbrasch/nix-configs.git /mnt/etc/nixos
+cd /mnt/etc/nixos
+
+nixos-install --flake "/mnt/etc/nixos/.#${configuration}"

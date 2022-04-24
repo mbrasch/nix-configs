@@ -365,6 +365,7 @@ in {
     go
     go-langserver
     (lua.withPackages (p: with p; [ luarocks mpack ]))
+    jq
 
     ###### other stuff ######
 
