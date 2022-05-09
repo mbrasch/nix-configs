@@ -83,7 +83,9 @@ createfilesystems() {
   #mount "${DISK}${PARTPREFIX}3" /mnt/boot
 }
 
-
+echo -e "Cloning configuration from git…"
+git clone https://github.com/mbrasch/nix-configs.git /mnt/etc/nixos
+cd /mnt/etc/nixos
 readarray -t FLAKEOUTPUTS < <(nix flake show --json | jq -r '.nixosConfigurations | keys | .[]')
 
 optstring="hd:o:"
@@ -119,9 +121,6 @@ createfilesystems
 #echo -e "Generating config…"
 #nixos-generate-config --root /mnt
 
-echo -e "Cloning configuration from git…"
-#git clone https://github.com/mbrasch/nix-configs.git /mnt/etc/nixos
-#cd /mnt/etc/nixos
 
 
 echo -e "Installing NixOS…"
