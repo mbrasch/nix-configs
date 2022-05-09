@@ -5,7 +5,7 @@
 #   echo -e "This script can only run from NixOS."; exit 1;
 # fi
 
-DISK=/dev/sda
+DISK=""
 PARTPREFIX="-disk"
 OUTPUT=""
 
@@ -93,10 +93,10 @@ optstring="hd:o:"
 while getopts ${optstring} opt; do
   case ${opt} in
     h) usage;;
-    d) if printf '%s\n' "${FLAKEOUTPUTS[@]}" | grep -qFx -- "$OPTARG"; then
+    d) if [ ! -z ${DISK} ]; then
          DISK=${OPTARG}
        else
-         echo -e "Given flake output ${RED}${OPTARG}${NORMAL} does not exist.\n"
+         echo -e "No target device given.\n"
          usage
        fi;;
     o) if printf '%s\n' "${FLAKEOUTPUTS[@]}" | grep -qFx -- "$OPTARG"; then
