@@ -1,77 +1,128 @@
-#!/bin/bash
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p jq nixUnstable
 
-#DISK=/dev/disk/by-id/ata-Samsung_SSD_850_EVO_500GB_S2RBNX0J333616J
+# if [ ! -d "/etc/nixos" ]; then
+#   echo -e "This script can only run from NixOS."; exit 1;
+# fi
+
+DISK=/dev/sda
 PARTPREFIX="-disk"
+OUTPUT=""
 
-if [ "$1" = "" ]; then
-  echo "Script called without target device, selecting /dev/sda"
-  DISK=/dev/sda
-  PARTPREFIX=""
-fi
+RED='\033[1;31m'
+NORMAL='\033[0;39m'
 
-echo -e " | This script will prepare a disk with ZFS for installing nixos."
-echo -e " | First we need to zap $1"
-echo -e " | Are you OK with this?"
-echo -e " | Press ENTER to going further or CTRL+C to abort."
-read -r _
-echo -e "zapping…"
-sgdisk --zap-all "${DISK}"
 
-# If you need legacy BIOS support
-echo -e "creating BIOS partition…"
-sgdisk -a1 -n2:34:2047 -t2:EF02 ${DISK}
 
-# If you need EFI support, make an EFI partition
-echo -e "creating EFI partition…"
-sgdisk -n3:1M:+512M -t3:EF00 "${DISK}"
+usage() {
+  echo -e ""
+  echo -e "Usage:   $(basename $0) -d <device name> -o <output name>"
+  echo -e "Example: $(basename $0) -d /dev/sdb -o myserver"
+  echo -e ""
+  echo -e "Device name:"
+  lsblk -f
+  echo -e ""
+  echo -e "Output name: Querying the flake reveals the following ${#FLAKEOUTPUTS[@]} NixOS configurations:"
+  echo -e "\t${FLAKEOUTPUTS[*]}"
+  exit 1
+}
 
-# Main ZFS partition, using up the remaining space on the drive
-echo -e "creating ZFS partition…"
-sgdisk -n1:0:0 -t1:BF01 "${DISK}"
 
-# Create the pool. If you want to tweak this a bit and you're feeling adventurous, you might try adding one or
-# more of the following additional options:
-#
-# To disable writing access times:                        -O atime=off
-# To enable filesystem compression:                       -O compression=lz4
-# To improve performance of certain extended attributes:  -O xattr=sa
-# For systemd-journald posixacls are required:            -O acltype=posixacl
-# Force 4K sectors (note small 'o'):                      -o ashift=12
-#
-# The 'mountpoint=none' option disables ZFS's automount machinery; we'll use the normal fstab-based mounting machinery in Linux.
-# '-R /mnt' is not a persistent property of the FS, it'll just be used while we're installing.
-echo -e "creating zpool…"
-zpool create -O mountpoint=none -O atime=off -O compression=lz4 -O xattr=sa -O acltype=posixacl -o ashift=12 -R /mnt rpool "${DISK}${PARTPREFIX}1" -f
 
-# Create the filesystems. This layout is designed so that /home is separate from the root filesystem, as you'll likely want to snapshot
-# it differently for backup purposes. It also makes a "nixos" filesystem underneath the root, to support installing multiple OSes if
-# that's something you choose to do in future.
-echo -e "creating filesystems…"
-zfs create -o mountpoint=none rpool/root
-zfs create -o mountpoint=legacy rpool/root/nixos
-zfs create -o mountpoint=legacy rpool/home
+welcome() {
+  echo -e "NixOS installer"
+  echo -e "==============="
+  echo -e "This script will bootstrap a new NixOS system from a given configuration. According to the options given, it will do the following:"
+  echo -e ""
+  echo -e "   * zapping the target disk ${RED}${DISK}${NORMAL}"
+  echo -e "   * creating 3 partitions (BIOS, EFI and system)"
+  echo -e "   * formatting the partitions (ZFS for system partition)"
+  echo -e "   * cloning configuration from git repository"
+  echo -e "   * installing your configuration ${RED}${OUTPUT}${NORMAL}"
+  echo -e "   * rebooting into new system"
+  echo -e ""
+  echo -e "Are you OK with this? Press ENTER to going further or CTRL+C to abort."
+  read -r _
+}
 
-# Mount the filesystems manually. The nixos installer will detect these mountpoints and save them to /mnt/nixos/hardware-configuration.nix
-# during the install process.
-echo -e "mounting filesystems…"
-mount -t zfs rpool/root/nixos /mnt
-mkdir /mnt/home
-mount -t zfs rpool/home /mnt/home
 
-# If you need to boot EFI, you'll need to set up /boot as a non-ZFS partition.
-echo -e "creating EFI boot partition…"
-mkfs.vfat "${DISK}${PARTPREFIX}3"
-mkdir /mnt/boot
-mount "${DISK}${PARTPREFIX}3" /mnt/boot
 
-echo -e "Installing nix unstable…"
-nix-env -iA nixos.nixUnstable
+partitioning() {
+  echo -e "zapping…"
+  #sgdisk --zap-all "${DISK}"
+
+  echo -e "creating BIOS partition…"
+  #sgdisk -a1 -n2:34:2047 -t2:EF02 ${DISK}
+
+  echo -e "creating EFI partition…"
+  #sgdisk -n3:1M:+512M -t3:EF00 "${DISK}"
+
+  # Main ZFS partition, using up the remaining space on the drive
+  echo -e "creating ZFS partition…"
+  #sgdisk -n1:0:0 -t1:BF01 "${DISK}"
+}
+
+
+createfilesystems() {
+  echo -e "creating zpool…"
+  #zpool create -O mountpoint=none -O atime=off -O compression=lz4 -O xattr=sa -O acltype=posixacl -o ashift=12 -R /mnt rpool "${DISK}${PARTPREFIX}1" -f
+
+  echo -e "creating filesystems…"
+  #zfs create -o mountpoint=none rpool/root
+  #zfs create -o mountpoint=legacy rpool/root/nixos
+  #zfs create -o mountpoint=legacy rpool/home
+
+  echo -e "mounting filesystems…"
+  #mount -t zfs rpool/root/nixos /mnt
+  #mkdir /mnt/home
+  #mount -t zfs rpool/home /mnt/home
+
+  echo -e "creating EFI filesystem…"
+  #mkfs.vfat "${DISK}${PARTPREFIX}3"
+  #mkdir /mnt/boot
+  #mount "${DISK}${PARTPREFIX}3" /mnt/boot
+}
+
+
+readarray -t FLAKEOUTPUTS < <(nix flake show --json | jq -r '.nixosConfigurations | keys | .[]')
+
+optstring="hd:o:"
+
+while getopts ${optstring} opt; do
+  case ${opt} in
+    h) usage;;
+    d) if printf '%s\n' "${FLAKEOUTPUTS[@]}" | grep -qFx -- "$OPTARG"; then
+         DISK=${OPTARG}
+       else
+         echo -e "Given flake output ${RED}${OPTARG}${NORMAL} does not exist.\n"
+         usage
+       fi;;
+    o) if printf '%s\n' "${FLAKEOUTPUTS[@]}" | grep -qFx -- "$OPTARG"; then
+         OUTPUT=${OPTARG}
+       else
+         echo -e "Given flake output ${RED}${OPTARG}${NORMAL} does not exist.\n"
+         usage
+       fi;;
+    #*) echo "******** ${OPTARG}.";exit 1 ;;
+  esac
+done
+
+
+
+welcome
+partitioning
+createfilesystems
+
+#echo -e "Installing nix unstable…"
+#nix-env -iA nixos.nixUnstable
 
 #echo -e "Generating config…"
 #nixos-generate-config --root /mnt
 
 echo -e "Cloning configuration from git…"
-git clone https://github.com/mbrasch/nix-configs.git /mnt/etc/nixos
-cd /mnt/etc/nixos
+#git clone https://github.com/mbrasch/nix-configs.git /mnt/etc/nixos
+#cd /mnt/etc/nixos
 
-nixos-install --flake "/mnt/etc/nixos/.#${configuration}"
+
+echo -e "Installing NixOS…"
+#nixos-install --flake "/mnt/etc/nixos/.#${OUTPUT}"
