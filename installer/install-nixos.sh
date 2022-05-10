@@ -1,9 +1,9 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p jq nixUnstable
 
-# if [ ! -d "/etc/nixos" ]; then
-#   echo -e "This script can only run from NixOS."; exit 1;
-# fi
+if [ ! -d "/etc/nixos" ] || [ ! -d "/iso/isolinux/" ]; then
+  echo -e "This script can only run from NixOS installer media."; exit 1;
+fi
 
 DISK=""
 PARTPREFIX="-disk"
@@ -93,13 +93,17 @@ optstring="hd:o:"
 while getopts ${optstring} opt; do
   case ${opt} in
     h) usage;;
-    d) if [ ! -z ${DISK} ]; then
-         DISK=${OPTARG}
-       else
+    d) if [ -z ${OPTARG} ]; then
          echo -e "No target device given.\n"
          usage
+       else
+         DISK=${OPTARG}
        fi;;
-    o) if printf '%s\n' "${FLAKEOUTPUTS[@]}" | grep -qFx -- "$OPTARG"; then
+    o) if [ -z ${OPTARG} ]; then
+         echo -e "No flake output given.\n"
+         usage
+       fi
+       if printf '%s\n' "${FLAKEOUTPUTS[@]}" | grep -qFx -- "$OPTARG"; then
          OUTPUT=${OPTARG}
        else
          echo -e "Given flake output ${RED}${OPTARG}${NORMAL} does not exist.\n"
