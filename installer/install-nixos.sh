@@ -5,6 +5,8 @@ if [ ! -d "/etc/nixos" ] || [ ! -d "/iso/isolinux/" ]; then
   echo -e "This script can only run from NixOS installer media."; exit 1;
 fi
 
+REPOSITORY="github:mbrasch/nix-configs"
+
 DISK=""
 PARTPREFIX="-disk"
 OUTPUT=""
@@ -83,10 +85,7 @@ createfilesystems() {
   #mount "${DISK}${PARTPREFIX}3" /mnt/boot
 }
 
-echo -e "Cloning configuration from git…"
-git clone https://github.com/mbrasch/nix-configs.git /mnt/etc/nixos
-cd /mnt/etc/nixos
-readarray -t FLAKEOUTPUTS < <(nix flake show --json | jq -r '.nixosConfigurations | keys | .[]')
+readarray -t FLAKEOUTPUTS < <(nix flake show "${REPOSITORY}" --json | jq -r '.nixosConfigurations | keys | .[]')
 
 optstring="hd:o:"
 
@@ -118,6 +117,10 @@ done
 welcome
 partitioning
 createfilesystems
+
+echo -e "Cloning configuration from git…"
+git clone https://github.com/mbrasch/nix-configs.git /mnt/etc/nixos
+cd /mnt/etc/nixos
 
 #echo -e "Installing nix unstable…"
 #nix-env -iA nixos.nixUnstable
