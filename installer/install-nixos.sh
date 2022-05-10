@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell jq nixUnstable
+#!nix-shell jq
 
 nix --version
 
@@ -87,7 +87,7 @@ createfilesystems() {
   #mount "${DISK}${PARTPREFIX}3" /mnt/boot
 }
 
-readarray -t FLAKEOUTPUTS < <(nix flake show --extra-experimental-features "nix-command flakes" "${REPOSITORY}" --json | jq -r '.nixosConfigurations | keys | .[]')
+readarray -t FLAKEOUTPUTS < <(nix flake show "${REPOSITORY}" --json | jq -r '.nixosConfigurations | keys | .[]')
 
 optstring="hd:o:"
 
