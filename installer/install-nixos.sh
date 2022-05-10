@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p jq nixUnstable
+#!nix-shell jq nixUnstable
 
 if [ ! -d "/etc/nixos" ] || [ ! -d "/iso/isolinux/" ]; then
   echo -e "This script can only run from NixOS installer media."; exit 1;
@@ -85,7 +85,7 @@ createfilesystems() {
   #mount "${DISK}${PARTPREFIX}3" /mnt/boot
 }
 
-readarray -t FLAKEOUTPUTS < <(nix flake show "${REPOSITORY}" --json | jq -r '.nixosConfigurations | keys | .[]')
+readarray -t FLAKEOUTPUTS < <(nix flake show --extra-experimental-features "nix-command flakes" "${REPOSITORY}" --json | jq -r '.nixosConfigurations | keys | .[]')
 
 optstring="hd:o:"
 
