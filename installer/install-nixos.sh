@@ -1,6 +1,8 @@
 #!/usr/bin/env nix-shell
 #!nix-shell jq nixUnstable
 
+nix --version
+
 if [ ! -d "/etc/nixos" ] || [ ! -d "/iso/isolinux/" ]; then
   echo -e "This script can only run from NixOS installer media."; exit 1;
 fi
