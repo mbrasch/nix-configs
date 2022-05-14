@@ -8,6 +8,10 @@ However, if you have any suggestions for improvement or the like, please let us 
 ## Darwin
 
 ### Initial install
+```shell
+# install Apple Command Line Developer Tools
+xcode-select --install
+```
 
 ```shell
 yes | sh <(curl -L https://nixos.org/nix/install) --daemon
@@ -19,7 +23,9 @@ echo "experimental-features = nix-command flakes" | sudo tee -a /etc/nix/nix.con
 ```shell
 # optional for testing nix
 nix-shell -p nix-info --run "nix-info -m"
+```
 
+```shell
 nix build --flake github:mbrasch/nix-configs#darwinConfigurations.bootstrap.system
 sudo rm /etc/nix/nix.conf                      # otherwise darwin-rebuild will fail to create a symlink to the generated nix config
 echo 'run\tprivate/var/run' | sudo tee -a /etc/synthetic.conf

@@ -29,7 +29,7 @@
       inherit (darwin.lib) darwinSystem;
       inherit (inputs.nixpkgs.lib) attrValues makeOverridable optionalAttrs singleton;
 
-      systems = [ "x86_64-darwin" "x86_64-linux" ];
+      systems = [ "x86_64-darwin" "aarch64-darwin" "x86_64-linux" "aarch64-linux" ];
       forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system);
 
       nixpkgsConfig = with inputs; rec {
