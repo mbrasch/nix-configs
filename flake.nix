@@ -68,13 +68,13 @@
 
         # Minimal configuration to bootstrap darwin systems
         bootstrap-darwin = makeOverridable darwinSystem {
-          system = "x86_64-darwin";
+          system = "aarch64-darwin";
           modules = [ ./darwin/bootstrap.nix { nixpkgs = nixpkgsConfig; } ];
         };
 
         # My primary macOS configuration
         mbrasch = darwinSystem {
-          system = "x86_64-darwin";
+          system = "aarch64-darwin";
           modules = nixDarwinCommonModules {
             user = "mbrasch";
             host = "mbrasch";
