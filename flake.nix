@@ -129,17 +129,17 @@
 
       # ----------------------------------------------------------------------------------------------------
 
-      darwinModules = { };
-
-      homeManagerModules = {
-        #awscli = import ./home/modules/programs/awscli.nix;
-      };
-
-      # `nix develop`
-      devShell = forAllSystems (system:
-        let pkgs = nixpkgs.legacyPackages.${system};
-        in pkgs.mkShell {
-          nativeBuildInputs = with pkgs; [ rnix-lsp nixpkgs-fmt ];
-        });
+#       darwinModules = { };
+#
+#       homeManagerModules = {
+#         #awscli = import ./home/modules/programs/awscli.nix;
+#       };
+#
+#       # `nix develop`
+#       devShell = forAllSystems (system:
+#         let pkgs = nixpkgs.legacyPackages.${system};
+#         in pkgs.mkShell {
+#           nativeBuildInputs = with pkgs; [ rnix-lsp nixpkgs-fmt ];
+#         });
     };
 }
