@@ -69,7 +69,9 @@
         # Minimal configuration to bootstrap darwin systems
         bootstrap-darwin = darwinSystem {
           system = "aarch64-darwin";
-          # modules = [ ./darwin/bootstrap.nix { nixpkgs = nixpkgsConfig; } ];
+          modules = [
+            # ./darwin/bootstrap.nix { nixpkgs = nixpkgsConfig; }
+          ];
         };
 
         # My primary macOS configuration
