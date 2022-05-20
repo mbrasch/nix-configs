@@ -53,38 +53,38 @@ welcome() {
 
 partitioning() {
   echo -e "zapping…"
-  #sgdisk --zap-all "${DISK}"
+  sgdisk --zap-all "${DISK}"
 
   echo -e "creating BIOS partition…"
-  #sgdisk -a1 -n2:34:2047 -t2:EF02 ${DISK}
+  sgdisk -a1 -n2:34:2047 -t2:EF02 ${DISK}
 
   echo -e "creating EFI partition…"
-  #sgdisk -n3:1M:+512M -t3:EF00 "${DISK}"
+  sgdisk -n3:1M:+512M -t3:EF00 "${DISK}"
 
   # Main ZFS partition, using up the remaining space on the drive
   echo -e "creating ZFS partition…"
-  #sgdisk -n1:0:0 -t1:BF01 "${DISK}"
+  sgdisk -n1:0:0 -t1:BF01 "${DISK}"
 }
 
 
 createfilesystems() {
   echo -e "creating zpool…"
-  #zpool create -O mountpoint=none -O atime=off -O compression=lz4 -O xattr=sa -O acltype=posixacl -o ashift=12 -R /mnt rpool "${DISK}${PARTPREFIX}1" -f
+  zpool create -O mountpoint=none -O atime=off -O compression=lz4 -O xattr=sa -O acltype=posixacl -o ashift=12 -R /mnt rpool "${DISK}${PARTPREFIX}1" -f
 
   echo -e "creating filesystems…"
-  #zfs create -o mountpoint=none rpool/root
-  #zfs create -o mountpoint=legacy rpool/root/nixos
-  #zfs create -o mountpoint=legacy rpool/home
+  zfs create -o mountpoint=none rpool/root
+  zfs create -o mountpoint=legacy rpool/root/nixos
+  zfs create -o mountpoint=legacy rpool/home
 
   echo -e "mounting filesystems…"
-  #mount -t zfs rpool/root/nixos /mnt
-  #mkdir /mnt/home
-  #mount -t zfs rpool/home /mnt/home
+  mount -t zfs rpool/root/nixos /mnt
+  mkdir /mnt/home
+  mount -t zfs rpool/home /mnt/home
 
   echo -e "creating EFI filesystem…"
-  #mkfs.vfat "${DISK}${PARTPREFIX}3"
-  #mkdir /mnt/boot
-  #mount "${DISK}${PARTPREFIX}3" /mnt/boot
+  mkfs.vfat "${DISK}${PARTPREFIX}3"
+  mkdir /mnt/boot
+  mount "${DISK}${PARTPREFIX}3" /mnt/boot
 }
 
 readarray -t FLAKEOUTPUTS < <(nix flake show "${REPOSITORY}" --json | jq -r '.nixosConfigurations | keys | .[]')
@@ -133,4 +133,4 @@ cd /mnt/etc/nixos
 
 
 echo -e "Installing NixOS…"
-#nixos-install --flake "/mnt/etc/nixos/.#${OUTPUT}"
+#nixos-install --flake "/mnt/etc/nixos/.#${OUTPUT}" #--no-root-passwd

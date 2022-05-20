@@ -26,7 +26,7 @@ nix-shell -p nix-info --run "nix-info -m"
 ```
 
 ```shell
-nix build --flake github:mbrasch/nix-configs#darwinConfigurations.bootstrap.system
+nix build github:mbrasch/nix-configs#darwinConfigurations.bootstrap-darwin.system
 sudo rm /etc/nix/nix.conf                      # otherwise darwin-rebuild will fail to create a symlink to the generated nix config
 echo 'run\tprivate/var/run' | sudo tee -a /etc/synthetic.conf
 /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t
