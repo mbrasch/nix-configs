@@ -1,5 +1,7 @@
-#!/usr/bin/env nix-shell
+#!/usr/bin/env nix-shell --extra-experimental-features flakes --extra-experimental-features nix-command
 #!nix-shell jq
+
+set -euxo pipefail
 
 nix --version
 
@@ -127,10 +129,11 @@ cd /mnt/etc/nixos
 #echo -e "Installing nix unstable…"
 #nix-env -iA nixos.nixUnstable
 
-#echo -e "Generating config…"
-#nixos-generate-config --root /mnt
+
+echo -e "Generating config…"
+nixos-generate-config --root /mnt
 
 
 
 echo -e "Installing NixOS…"
-#nixos-install --flake "/mnt/etc/nixos/.#${OUTPUT}" #--no-root-passwd
+nixos-install --extra-experimental-features flakes --extra-experimental-features nix-command --flake "/mnt/etc/nixos/.#${OUTPUT}" --no-root-passwd

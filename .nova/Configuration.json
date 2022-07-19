@@ -1,3 +1,4 @@
 {
-  "editor.default_syntax" : "nix"
+  "editor.default_syntax" : "nix",
+  "workspace.name" : "nix-configs"
 }

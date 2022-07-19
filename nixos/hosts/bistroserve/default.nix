@@ -20,6 +20,10 @@
       "console=tty1"
     ];
 
+    kernelPackages = [
+      pkgs.zfsUnstable.latestCompatibleLinuxPackages
+    ];
+
     extraModulePackages = [
       #config.boot.kernelPackages.exfat-nofuse
     ];
@@ -37,13 +41,11 @@
   networking = {
     hostName = "BistroServe";
     hostId = "2a1b5bfb";
-    useDHCP = false; # global useDHCP flag is deprecated -> explicitly set to false
     interfaces.enp1s0.useDHCP = true;
     interfaces.enp1s0.wakeOnLan.enable = true;
     interfaces.enp2s0.useDHCP = true;
     interfaces.enp3s0.useDHCP = true;
     interfaces.enp4s0.useDHCP = true;
-    wireless.enable = false;
 
     #proxy = {
     #  enable = false;
@@ -125,8 +127,6 @@
     fd
     tmux
     elinks
-
-    #node2nix
   ];
 
   ##############################################################################################################################

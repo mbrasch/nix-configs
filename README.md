@@ -85,7 +85,7 @@ export PARTPREFIX=""
 
 # create partitions
 sgdisk --zap-all "${DISK}"
-sgdisk -n3:1M:+512M -t3:EF00 "${DISK}
+sgdisk -n3:1M:+512M -t3:EF00 "${DISK}"
 sgdisk -n1:0:0 -t1:BF01 "${DISK}"
 
 # create zpool
@@ -109,7 +109,7 @@ mount "${DISK}${PARTPREFIX}3" /mnt/boot
 
 #### Install NixOS
 ```
-nix-env -iA nixUnstable    # for flake support
+nix-env -iA nixos.nixUnstable    # for flake support
 nixos-install --flake github:mbrasch/nix-configs#nixosConfigurations.bootstrap.system
 ```
 

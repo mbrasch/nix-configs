@@ -60,7 +60,18 @@
         }
       ];
 
+      nixos-installer-script = nixpkgs.writeShellScriptBin "nixos-installer" ''
+        export PATH=${nixpkgs.lib.makeBinPath [ nixpkgs.depA nixpkgs.depB nixpkgs.depC ]}:$PATH
+
+        exec depA --flag1 --flag2 withArg "$@"
+      '';
+
+
     in {
+
+      # ----------------------------------------------------------------------------------------------------
+
+      # { type = "app"; path = "${nixos-installer-script}/bin/nixos-installer" }
 
       # ----------------------------------------------------------------------------------------------------
 
