@@ -104,8 +104,8 @@ done
 
 
 welcome
-partitioning
-createfilesystems
+#partitioning
+#createfilesystems
 
 
 echo -e "Cloning configuration from git…"
