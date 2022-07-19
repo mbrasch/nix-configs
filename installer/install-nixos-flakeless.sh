@@ -119,8 +119,8 @@ echo -e "Cloning configuration from git…"
 git clone https://github.com/mbrasch/nix-configs.git
 
 echo -e "Copying minimal config to /mnt/etc/nixos/ …"
+mkdir /mnt/etc /mnt/etc/nixos
 cp nix-configs/nixos/hosts/minimal/default.nix /mnt/etc/nixos/configuration.nix
-
 
 echo -e "Generating config…"
 nixos-generate-config --root /mnt
