@@ -11,7 +11,7 @@ fi
 
 DISK="/dev/sda"
 DEFAULT_DISK="/dev/sda"
-PARTPREFIX="-disk"
+PARTPREFIX=""
 OUTPUT=""
 
 RED='\033[1;31m'
