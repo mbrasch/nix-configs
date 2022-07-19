@@ -68,7 +68,16 @@ fi
 
 ## NixOS
 
-### Initial install
+### Flakeless install
+Setup and install a NixOS with config /NixOS/hosts/minimal on ZSH.
+
+```bash
+sh <(curl -L https://raw.githubusercontent.com/mbrasch/nix-configs/main/installer/install-nixos-flakeless.sh)
+```
+
+### Install via flakes
+
+#### Initial install
 The following script will prepare sda for installation.
 
 ```bash
@@ -78,7 +87,7 @@ It will then let you edit the configuration. After closing the editor, the insta
 you will be asked for the new root password. Afterwards you can reboot into the new system. **Don't forget to set the passwords for
 the user accounts created.**
 
-#### Prepare filesystems
+##### Prepare filesystems
 ```bash
 export DISK=/dev/sda
 export PARTPREFIX=""
@@ -107,13 +116,13 @@ mkdir /mnt/boot
 mount "${DISK}${PARTPREFIX}3" /mnt/boot
 ```
 
-#### Install NixOS
+##### Install NixOS
 ```
 nix-env -iA nixos.nixUnstable    # for flake support
 nixos-install --flake github:mbrasch/nix-configs#nixosConfigurations.bootstrap.system
 ```
 
-### Regular use
+#### Regular use
 ```
 nixos-rebuild switch --impure --flake github:mbrasch/nix-configs#bistroserve
 ```
