@@ -104,14 +104,14 @@ createfilesystems() {
 #   mkfs.vfat "${DISK}${PARTPREFIX}3"
 #   mkdir /mnt/boot
 #   mount "${DISK}${PARTPREFIX}3" /mnt/boot
-  mkfs.ext4 -L nixos ${DISK}1
-  mkswap -L swap ${DISK}2
-  mkfs.fat -F 32 -n boot ${DISK}3
+  mkfs.ext4 -L nixos "${DISK}1"
+  mkswap -L swap "${DISK}2"
+  mkfs.fat -F 32 -n boot "${DISK}3"
 
   mount /dev/disk/by-label/nixos /mnt
   mkdir -p /mnt/boot
   mount /dev/disk/by-label/boot /mnt/boot
-  swapon ${DISK}2
+  swapon "${DISK}2"
 }
 
 optstring="hd:"
