@@ -3,9 +3,8 @@
 
 set -euo pipefail
 
-#echo -e "Installing git…"
-
-#nix-env -iA nixos.git
+echo -e "Installing git…"
+nix-env -iA nixos.git
 
 
 if [ ! -d "/etc/nixos" ] || [ ! -d "/iso/isolinux/" ]; then
