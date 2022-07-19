@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -p git
+#!nix-shell -p nixpkgs.git
 
 set -euo pipefail
 
