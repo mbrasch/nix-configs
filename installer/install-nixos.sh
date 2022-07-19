@@ -1,7 +1,7 @@
 #!/usr/bin/env nix-shell --extra-experimental-features flakes --extra-experimental-features nix-command
 #!nix-shell jq
 
-set -euxo pipefail
+set -euo pipefail
 
 nix --version
 
