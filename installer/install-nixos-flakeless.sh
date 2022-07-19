@@ -3,9 +3,7 @@
 
 set -euo pipefail
 
-nix --version
-#git --version
-
+echo -e "Installing git…"
 nix-env -iA nixos.git
 
 if [ ! -d "/etc/nixos" ] || [ ! -d "/iso/isolinux/" ]; then
@@ -38,6 +36,9 @@ usage() {
 welcome() {
   echo -e "NixOS installer"
   echo -e "==============="
+  echo -e ""
+  echo -e "NixOS $(nixos-version), Nix $(nix --version)"
+  echo -e ""
   echo -e "This script will bootstrap a new NixOS system from a given configuration. According to the options given, it will do the following:"
   echo -e ""
   echo -e "   * zapping the target disk ${RED}${DISK}${NORMAL}"
@@ -116,8 +117,8 @@ mountfilesystems
 echo -e "Cloning configuration from git…"
 git clone https://github.com/mbrasch/nix-configs.git
 
-echo -e "Copying minimal confi to /mnt/etc/nixos/ …"
-cp /nixos/hosts/minimal/default.nix /mnt/etc/nixos/configuration.nix
+echo -e "Copying minimal config to /mnt/etc/nixos/ …"
+cp nix-configs/nixos/hosts/minimal/default.nix /mnt/etc/nixos/configuration.nix
 
 
 echo -e "Generating config…"
