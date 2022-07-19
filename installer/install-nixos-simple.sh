@@ -64,7 +64,7 @@ partitioning() {
   echo -e "creating ZFS partition…"
   sgdisk -n1:0:0 -t1:BF01 "${DISK}"
 
-  partprobe
+  partprobe ${DISK}
 }
 
 
