@@ -1,5 +1,4 @@
-#!/usr/bin/env nix-shell
-#!nix-shell jq
+#!/usr/bin/bash
 
 set -euo pipefail
 
@@ -9,9 +8,9 @@ if [ ! -d "/etc/nixos" ] || [ ! -d "/iso/isolinux/" ]; then
   echo -e "This script can only run from NixOS installer media."; exit 1;
 fi
 
-REPOSITORY="github:mbrasch/nix-configs"
 
 DISK=""
+DEFAULT_DISK="/dev/sda"
 PARTPREFIX="-disk"
 OUTPUT=""
 
@@ -22,14 +21,11 @@ NORMAL='\033[0;39m'
 
 usage() {
   echo -e ""
-  echo -e "Usage:   $(basename $0) -d <device name> -o <output name>"
-  echo -e "Example: $(basename $0) -d /dev/sdb -o myserver"
+  echo -e "Usage:   $(basename $0) -d <device name>"
+  echo -e "Example: $(basename $0) -d /dev/sdb"
   echo -e ""
   echo -e "Device name:"
   lsblk -f
-  echo -e ""
-  echo -e "Output name: Querying the flake reveals the following ${#FLAKEOUTPUTS[@]} NixOS configurations:"
-  echo -e "\t${FLAKEOUTPUTS[*]}"
   exit 1
 }
 
@@ -44,7 +40,7 @@ welcome() {
   echo -e "   * creating 3 partitions (BIOS, EFI and system)"
   echo -e "   * formatting the partitions (ZFS for system partition)"
   echo -e "   * cloning configuration from git repository"
-  echo -e "   * installing your configuration ${RED}${OUTPUT}${NORMAL}"
+  echo -e "   * installing your static minimal configuration ${RED}/nixos/hosts/minimal${NORMAL}"
   echo -e "   * rebooting into new system"
   echo -e ""
   echo -e "Are you OK with this? Press ENTER to going further or CTRL+C to abort."
@@ -89,51 +85,39 @@ createfilesystems() {
   mount "${DISK}${PARTPREFIX}3" /mnt/boot
 }
 
-readarray -t FLAKEOUTPUTS < <(nix flake show "${REPOSITORY}" --json | jq -r '.nixosConfigurations | keys | .[]')
-
-optstring="hd:o:"
+optstring="hd:"
 
 while getopts ${optstring} opt; do
   case ${opt} in
     h) usage;;
     d) if [ -z ${OPTARG} ]; then
-         echo -e "No target device given.\n"
-         usage
+         echo -e "No target device given. Defaulting to ${DEFAULT_DISK}.\n"
+         DISK=${DEFAULT_DISK}
        else
          DISK=${OPTARG}
-       fi;;
-    o) if [ -z ${OPTARG} ]; then
-         echo -e "No flake output given.\n"
-         usage
-       fi
-       if printf '%s\n' "${FLAKEOUTPUTS[@]}" | grep -qFx -- "$OPTARG"; then
-         OUTPUT=${OPTARG}
-       else
-         echo -e "Given flake output ${RED}${OPTARG}${NORMAL} does not exist.\n"
-         usage
        fi;;
     #*) echo "******** ${OPTARG}.";exit 1 ;;
   esac
 done
 
 
-
 welcome
 partitioning
 createfilesystems
 
-echo -e "Cloning configuration from git…"
-git clone https://github.com/mbrasch/nix-configs.git /mnt/etc/nixos
-cd /mnt/etc/nixos
 
-#echo -e "Installing nix unstable…"
-#nix-env -iA nixos.nixUnstable
+echo -e "Cloning configuration from git…"
+git clone https://github.com/mbrasch/nix-configs.git
+
+echo -e "Copying minimal confi to /mnt/etc/nixos/ …"
+cp /nixos/hosts/minimal/default.nix /mnt/etc/nixos/configuration.nix
 
 
 echo -e "Generating config…"
 nixos-generate-config --root /mnt
 
 
-
 echo -e "Installing NixOS…"
-nixos-install --extra-experimental-features flakes --extra-experimental-features nix-command --flake "/mnt/etc/nixos/.#${OUTPUT}" --no-root-passwd
+nixos-install --no-root-passwd
+
+echo -e "Installer completed. You can now reboot your machine."
