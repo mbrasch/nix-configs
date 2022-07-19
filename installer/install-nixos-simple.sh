@@ -9,7 +9,7 @@ if [ ! -d "/etc/nixos" ] || [ ! -d "/iso/isolinux/" ]; then
 fi
 
 
-DISK=""
+DISK="/dev/sda"
 DEFAULT_DISK="/dev/sda"
 PARTPREFIX="-disk"
 OUTPUT=""
