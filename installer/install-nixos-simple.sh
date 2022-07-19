@@ -1,10 +1,12 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -p git
+#!nix-shell -i bash -p git
 
 set -euo pipefail
 
 nix --version
-nix-env -iA nixos.git
+git --version
+
+#nix-env -iA nixos.git
 
 if [ ! -d "/etc/nixos" ] || [ ! -d "/iso/isolinux/" ]; then
   echo -e "This script can only run from NixOS installer media."; exit 1;
