@@ -9,9 +9,11 @@
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
+      efi.efiSysMountPoint = "/boot/efi";
       grub.enable = false;
+      grub.efiSupport = true;
       grub.version = 2;
-      grub.device = "/dev/sda";
+      grub.device = "nodev";
     };
 
     kernelParams = [

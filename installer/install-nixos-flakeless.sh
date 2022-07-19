@@ -72,17 +72,17 @@ partitioning() {
 #   partprobe ${DISK}
 
   echo -e "creating GPT patition scheme…"
-  parted /dev/sda -- mklabel gpt              # gpt || msdos
+  parted ${DISK} -- mklabel gpt              # gpt || msdos
 
   echo -e "creating root partition…"
-  parted /dev/sda -- mkpart primary 512MiB -4GiB
+  parted ${DISK} -- mkpart primary 512MiB -4GiB
 
   echo -e "creating swap partition…"
-  parted /dev/sda -- mkpart primary linux-swap -4GiB 100%
+  parted ${DISK} -- mkpart primary linux-swap -4GiB 100%
 
   echo -e "creating EFI partition…"
-  parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
-  parted /dev/sda -- set 3 esp on
+  parted ${DISK} -- mkpart ESP fat32 1MiB 512MiB
+  parted ${DISK} -- set 3 esp on
 }
 
 
@@ -104,14 +104,14 @@ createfilesystems() {
 #   mkfs.vfat "${DISK}${PARTPREFIX}3"
 #   mkdir /mnt/boot
 #   mount "${DISK}${PARTPREFIX}3" /mnt/boot
-  mkfs.ext4 -L nixos /dev/sda1
-  mkswap -L swap /dev/sda2
-  mkfs.fat -F 32 -n boot /dev/sda3
+  mkfs.ext4 -L nixos ${DISK}1
+  mkswap -L swap ${DISK}2
+  mkfs.fat -F 32 -n boot ${DISK}3
 
   mount /dev/disk/by-label/nixos /mnt
   mkdir -p /mnt/boot
   mount /dev/disk/by-label/boot /mnt/boot
-  swapon /dev/sda2
+  swapon ${DISK}2
 }
 
 optstring="hd:"
