@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -p nixpkgs.git
+#!nix-shell -p nixos.git
 
 set -euo pipefail
 
@@ -76,7 +76,9 @@ createfilesystems() {
   zfs create -o mountpoint=none rpool/root
   zfs create -o mountpoint=legacy rpool/root/nixos
   zfs create -o mountpoint=legacy rpool/home
+}
 
+mountfilesystems() {
   echo -e "mounting filesystems…"
   mount -t zfs rpool/root/nixos /mnt
   mkdir /mnt/home
@@ -106,7 +108,7 @@ done
 welcome
 #partitioning
 #createfilesystems
-
+mountfilesystems
 
 echo -e "Cloning configuration from git…"
 git clone https://github.com/mbrasch/nix-configs.git
