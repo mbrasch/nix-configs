@@ -63,6 +63,8 @@ partitioning() {
   # Main ZFS partition, using up the remaining space on the drive
   echo -e "creating ZFS partition…"
   sgdisk -n1:0:0 -t1:BF01 "${DISK}"
+
+  partprobe
 }
 
 
