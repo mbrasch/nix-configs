@@ -1,10 +1,11 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p git     # @TODO: warum wird git nicht installiert?
+#!nix-shell -p git     # @TODO: warum wird git nicht installiert?
 
 set -euo pipefail
 
 echo -e "Installing git…"
-nix-env -iA git
+
+nix-env -iA nixos.git
 
 
 if [ ! -d "/etc/nixos" ] || [ ! -d "/iso/isolinux/" ]; then
