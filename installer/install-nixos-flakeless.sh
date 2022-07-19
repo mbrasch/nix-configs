@@ -87,23 +87,31 @@ partitioning() {
 
 
 createfilesystems() {
-  echo -e "creating zpool…"
-  zpool create -O mountpoint=none -O atime=off -O compression=lz4 -O xattr=sa -O acltype=posixacl -o ashift=12 -R /mnt rpool "${DISK}${PARTPREFIX}1" -f
+#   echo -e "creating zpool…"
+#   zpool create -O mountpoint=none -O atime=off -O compression=lz4 -O xattr=sa -O acltype=posixacl -o ashift=12 -R /mnt rpool "${DISK}${PARTPREFIX}1" -f
+#
+#   echo -e "creating filesystems…"
+#   zfs create -o mountpoint=none rpool/root
+#   zfs create -o mountpoint=legacy rpool/root/nixos
+#   zfs create -o mountpoint=legacy rpool/home
+#
+#   echo -e "mounting filesystems…"
+#   mount -t zfs rpool/root/nixos /mnt
+#   mkdir /mnt/home
+#   mount -t zfs rpool/home /mnt/home
+#
+#   echo -e "creating EFI filesystem…"
+#   mkfs.vfat "${DISK}${PARTPREFIX}3"
+#   mkdir /mnt/boot
+#   mount "${DISK}${PARTPREFIX}3" /mnt/boot
+  mkfs.ext4 -L nixos /dev/sda1
+  mkswap -L swap /dev/sda2
+  mkfs.fat -F 32 -n boot /dev/sda3
 
-  echo -e "creating filesystems…"
-  zfs create -o mountpoint=none rpool/root
-  zfs create -o mountpoint=legacy rpool/root/nixos
-  zfs create -o mountpoint=legacy rpool/home
-
-  echo -e "mounting filesystems…"
-  mount -t zfs rpool/root/nixos /mnt
-  mkdir /mnt/home
-  mount -t zfs rpool/home /mnt/home
-
-  echo -e "creating EFI filesystem…"
-  mkfs.vfat "${DISK}${PARTPREFIX}3"
-  mkdir /mnt/boot
-  mount "${DISK}${PARTPREFIX}3" /mnt/boot
+  mount /dev/disk/by-label/nixos /mnt
+  mkdir -p /mnt/boot
+  mount /dev/disk/by-label/boot /mnt/boot
+  swapon /dev/sda2
 }
 
 optstring="hd:"
