@@ -38,7 +38,7 @@ welcome() {
   echo -e "NixOS installer"
   echo -e "==============="
   echo -e ""
-  echo -e "NixOS $(nixos-version), Nix $(nix --version)"
+  echo -e "NixOS $(nixos-version), $(nix --version)"
   echo -e ""
   echo -e "This script will bootstrap a new NixOS system from a given configuration. According to the options given, it will do the following:"
   echo -e ""
@@ -81,9 +81,7 @@ createfilesystems() {
   zfs create -o mountpoint=none rpool/root
   zfs create -o mountpoint=legacy rpool/root/nixos
   zfs create -o mountpoint=legacy rpool/home
-}
 
-mountfilesystems() {
   echo -e "mounting filesystems…"
   mount -t zfs rpool/root/nixos /mnt
   mkdir /mnt/home
@@ -113,18 +111,15 @@ done
 welcome
 partitioning
 createfilesystems
-mountfilesystems
 
 echo -e "Cloning configuration from git…"
 git clone https://github.com/mbrasch/nix-configs.git
 
-echo -e "Copying minimal config to /mnt/etc/nixos/ …"
-mkdir /mnt/etc /mnt/etc/nixos
-cp nix-configs/nixos/hosts/minimal/default.nix /mnt/etc/nixos/configuration.nix
-
 echo -e "Generating config…"
 nixos-generate-config --root /mnt
 
+echo -e "Copying minimal config to /mnt/etc/nixos/ …"
+cp -f nix-configs/nixos/hosts/minimal/default.nix /mnt/etc/nixos/configuration.nix
 
 echo -e "Installing NixOS…"
 nixos-install --no-root-passwd
