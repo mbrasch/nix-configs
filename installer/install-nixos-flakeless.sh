@@ -1,12 +1,12 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p git
+#!nix-shell -i bash -p git     # @TODO: warum wird git nicht installiert?
 
 set -euo pipefail
 
 nix --version
-git --version
+#git --version
 
-#nix-env -iA nixos.git
+nix-env -iA nixos.git
 
 if [ ! -d "/etc/nixos" ] || [ ! -d "/iso/isolinux/" ]; then
   echo -e "This script can only run from NixOS installer media."; exit 1;
