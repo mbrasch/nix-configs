@@ -1,4 +1,5 @@
-#!/usr/bin/bash
+#!/usr/bin/env nix-shell
+#!nix-shell -p git
 
 set -euo pipefail
 
@@ -92,7 +93,6 @@ while getopts ${optstring} opt; do
     h) usage;;
     d) if [ -z ${OPTARG} ]; then
          echo -e "No target device given. Defaulting to ${DEFAULT_DISK}.\n"
-         DISK=${DEFAULT_DISK}
        else
          DISK=${OPTARG}
        fi;;
