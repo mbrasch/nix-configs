@@ -4,6 +4,7 @@
 set -euo pipefail
 
 nix --version
+git --version
 
 if [ ! -d "/etc/nixos" ] || [ ! -d "/iso/isolinux/" ]; then
   echo -e "This script can only run from NixOS installer media."; exit 1;
