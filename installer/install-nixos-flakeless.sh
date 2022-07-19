@@ -59,17 +59,30 @@ partitioning() {
   echo -e "zapping…"
   sgdisk --zap-all "${DISK}"
 
-  echo -e "creating BIOS partition…"
-  sgdisk -a1 -n2:34:2047 -t2:EF02 ${DISK}
+#   echo -e "creating BIOS partition…"
+#   sgdisk -a1 -n2:34:2047 -t2:EF02 ${DISK}
+#
+#   echo -e "creating EFI partition…"
+#   sgdisk -n3:1M:+512M -t3:EF00 "${DISK}"
+#
+#   # Main ZFS partition, using up the remaining space on the drive
+#   echo -e "creating ZFS partition…"
+#   sgdisk -n1:0:0 -t1:BF01 "${DISK}"
+#
+#   partprobe ${DISK}
+
+  echo -e "creating GPT patition scheme…"
+  parted /dev/sda -- mklabel gpt              # gpt || msdos
+
+  echo -e "creating root partition…"
+  parted /dev/sda -- mkpart primary 512MiB -4GiB
+
+  echo -e "creating swap partition…"
+  parted /dev/sda -- mkpart primary linux-swap -4GiB 100%
 
   echo -e "creating EFI partition…"
-  sgdisk -n3:1M:+512M -t3:EF00 "${DISK}"
-
-  # Main ZFS partition, using up the remaining space on the drive
-  echo -e "creating ZFS partition…"
-  sgdisk -n1:0:0 -t1:BF01 "${DISK}"
-
-  partprobe ${DISK}
+  parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
+  parted /dev/sda -- set 3 esp on
 }
 
 
