@@ -72,7 +72,6 @@ fi
 Setup and install a NixOS with config /NixOS/hosts/minimal on ZSH.
 
 ```bash
-nix-env -iA nixos.git
 sh <(curl -L https://raw.githubusercontent.com/mbrasch/nix-configs/main/installer/install-nixos-flakeless.sh)
 ```
 

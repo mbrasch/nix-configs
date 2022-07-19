@@ -9,7 +9,7 @@
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
-      grub.enable = true;
+      grub.enable = false;
       grub.version = 2;
       grub.device = "/dev/sda";
     };
@@ -19,9 +19,9 @@
       "console=tty1"
     ];
 
-    kernelPackages = [
-      pkgs.zfsUnstable.latestCompatibleLinuxPackages
-    ];
+    #kernelPackages = [
+    #  pkgs.zfsUnstable.latestCompatibleLinuxPackages
+    #];
   };
 
 
