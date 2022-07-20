@@ -102,7 +102,7 @@ createfilesystems_zfs() {
   mount -t zfs rpool/home /mnt/home
 
   echo -e "creating EFI filesystem…"
-  mkfs.vfat "${DISK}${PARTPREFIX}3"
+  mkfs.vfat "${DISK}${PARTPREFIX}2"
   mkdir /mnt/boot
   mount "${DISK}${PARTPREFIX}3" /mnt/boot
 }
