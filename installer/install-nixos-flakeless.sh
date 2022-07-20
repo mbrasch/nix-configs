@@ -1,7 +1,7 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p git     # @TODO: warum wird git nicht installiert?
 
-set -eu -o pipefail
+set -euo pipefail
 
 #echo -e "Changing nix-channel to nixos-unstable…"
 #nix-channel --add https://nixos.org/channels/nixos-unstable nixos
@@ -26,8 +26,8 @@ NORMAL='\033[0;39m'
 
 usage() {
   echo -e ""
-  echo -e "Usage:   $(basename $0) -d <device name>" -f <filesystem>
-  echo -e "Example: $(basename $0) -d /dev/sdb" -f zfs
+  echo -e "Usage:   $(basename $0) -d <device name> -f <filesystem>"
+  echo -e "Example: $(basename $0) -d /dev/sdb -f zfs"
   echo -e ""
   echo -e "Filesystem could be: zfs or ext4"
   echo -e ""
