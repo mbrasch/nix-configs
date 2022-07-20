@@ -13,8 +13,6 @@ fi
 
 
 DISK="/dev/sda"
-DEFAULT_DISK="/dev/sda"
-PARTPREFIX=""
 OUTPUT=""
 
 RED='\033[1;31m'
@@ -55,41 +53,21 @@ welcome() {
 
 
 
-partitioning_via_sgdisk() {
+partitioning() {
   echo -e "zapping ${DISK}…"
   sgdisk --zap-all "${DISK}"
-  #partprobe ${DISK}
-
-  #echo -e "creating BIOS partition…"
-  #sgdisk -a1 -n2:34:2047 -t2:EF02 ${DISK}
 
   echo -e "creating EFI partition…"
-  sgdisk -n3:1M:+512M -t3:EF00 "${DISK}"
+  sgdisk -n2:1M:+512M -t2:EF00 "${DISK}"
 
-  # Main ZFS partition, using up the remaining space on the drive
   echo -e "creating ZFS partition…"
   sgdisk -n1:0:0 -t1:BF01 "${DISK}"
-
-  #partprobe ${DISK}
-}
-
-partitioning_via_parted() {
-  echo -e "creating GPT patition scheme…"
-  parted ${DISK} -- mklabel gpt
-
-  echo -e "creating root partition…"
-  parted ${DISK} -- mkpart primary 512MiB -1024MiB
-
-  echo -e "creating EFI partition…"
-  parted ${DISK} -- mkpart ESP fat32 1MiB 512MiB
-  parted ${DISK} -- set 3 esp on
 }
 
 
-
-createfilesystems_zfs() {
+createfilesystems() {
   echo -e "creating zpool…"
-  zpool create -O mountpoint=none -O atime=off -O compression=lz4 -O xattr=sa -O acltype=posixacl -o ashift=12 -R /mnt rpool "${DISK}${PARTPREFIX}1" -f
+  zpool create -O mountpoint=none -O atime=off -O compression=lz4 -O xattr=sa -O acltype=posixacl -o ashift=12 -R /mnt rpool "${DISK}1" -f
 
   echo -e "creating filesystems…"
   zfs create -o mountpoint=none rpool/root
@@ -102,22 +80,10 @@ createfilesystems_zfs() {
   mount -t zfs rpool/home /mnt/home
 
   echo -e "creating EFI filesystem…"
-  mkfs.vfat "${DISK}${PARTPREFIX}2"
+  mkfs.vfat "${DISK}2"
   mkdir /mnt/boot
-  mount "${DISK}${PARTPREFIX}3" /mnt/boot
+  mount "${DISK}2" /mnt/boot
 }
-
-createfilesystems_ext4() {
-  echo -e "creating filesystems…"
-  mkfs.ext4 -L nixos "${DISK}1"
-  mkfs.fat -F 32 -n boot "${DISK}2"
-
-  echo -e "mounting filesystems…"
-  mount ${DISK}1 /mnt
-  mkdir -p /mnt/boot
-  mount ${DISK}2 /mnt/boot
-}
-
 
 
 optstring="hd:"
@@ -126,7 +92,7 @@ while getopts ${optstring} opt; do
   case ${opt} in
     h) usage;;
     d) if [ -z ${OPTARG} ]; then
-         echo -e "No target device given. Defaulting to ${DEFAULT_DISK}.\n"
+         echo -e "No target device given. Defaulting to ${DISK}.\n"
        else
          DISK=${OPTARG}
        fi;;
@@ -136,8 +102,8 @@ done
 
 
 welcome
-partitioning_via_sgdisk
-createfilesystems_zfs
+partitioning
+createfilesystems
 
 echo -e "Cloning configuration from git…"
 git clone https://github.com/mbrasch/nix-configs.git
