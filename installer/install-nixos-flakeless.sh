@@ -136,8 +136,8 @@ done
 
 
 welcome
-partitioning_via_parted
-createfilesystems_ext4
+partitioning_via_gsdisk
+createfilesystems_zfs
 
 echo -e "Cloning configuration from git…"
 git clone https://github.com/mbrasch/nix-configs.git
