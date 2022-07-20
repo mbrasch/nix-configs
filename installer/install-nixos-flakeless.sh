@@ -78,7 +78,7 @@ partitioning_via_parted() {
   parted ${DISK} -- mklabel gpt
 
   echo -e "creating root partition…"
-  parted ${DISK} -- mkpart primary 512MiB 100%
+  parted ${DISK} -- mkpart primary 512MiB -1024MiB
 
   echo -e "creating EFI partition…"
   parted ${DISK} -- mkpart ESP fat32 1MiB 512MiB
