@@ -3,7 +3,11 @@
 
 set -euo pipefail
 
-echo -e "Installing git…"
+#echo -e "Changing nix-channel to nixos-unstable…"
+#nix-channel --add https://nixos.org/channels/nixos-unstable nixos
+#nix-channel --update
+
+echo -e "Installing some requirements…"
 nix-env -iA nixos.git
 
 
@@ -22,8 +26,10 @@ NORMAL='\033[0;39m'
 
 usage() {
   echo -e ""
-  echo -e "Usage:   $(basename $0) -d <device name>"
-  echo -e "Example: $(basename $0) -d /dev/sdb"
+  echo -e "Usage:   $(basename $0) -d <device name>" -f <filesystem>
+  echo -e "Example: $(basename $0) -d /dev/sdb" -f zfs
+  echo -e ""
+  echo -e "Filesystem could be: zfs or ext4"
   echo -e ""
   echo -e "Device name:"
   lsblk -f
@@ -64,7 +70,8 @@ partitioning() {
 }
 
 
-createfilesystems() {
+
+createfilesystems_zfs() {
   echo -e "creating zpool…"
   zpool create -O mountpoint=none -O atime=off -O compression=lz4 -O xattr=sa -O acltype=posixacl -o ashift=12 -R /mnt rpool "${DISK}1" -f
 
@@ -85,6 +92,13 @@ createfilesystems() {
 }
 
 
+
+createfilesystems_ext4() {
+
+}
+
+
+
 optstring="hd:"
 
 while getopts ${optstring} opt; do
@@ -102,7 +116,7 @@ done
 
 welcome
 partitioning
-createfilesystems
+createfilesystems_zfs
 
 echo -e "Cloning configuration from git…"
 git clone https://github.com/mbrasch/nix-configs.git

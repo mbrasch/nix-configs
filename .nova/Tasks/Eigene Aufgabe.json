@@ -1,8 +1,0 @@
-{
-  "actions" : {
-    "run" : {
-      "script" : "#!\/bin\/sh\n\ndarwin-rebuild switch --flake .#mbrasch\n"
-    }
-  },
-  "openLogOnRun" : "start"
-}
