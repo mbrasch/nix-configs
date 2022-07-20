@@ -1,7 +1,7 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p git     # @TODO: warum wird git nicht installiert?
 
-set -euo pipefail
+set -eu -o pipefail
 
 #echo -e "Changing nix-channel to nixos-unstable…"
 #nix-channel --add https://nixos.org/channels/nixos-unstable nixos
@@ -94,7 +94,12 @@ createfilesystems_zfs() {
 
 
 createfilesystems_ext4() {
+  mkfs.ext4 -L nixos ${DISK}1
+  mkfs.fat -F 32 -n boot ${DISK}2
 
+  mount ${DISK}1 /mnt
+  mkdir -p /mnt/boot
+  mount ${DISK}2 /mnt/boot
 }
 
 
@@ -116,7 +121,8 @@ done
 
 welcome
 partitioning
-createfilesystems_zfs
+createfilesystems_ext4
+
 
 echo -e "Cloning configuration from git…"
 git clone https://github.com/mbrasch/nix-configs.git
