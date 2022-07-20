@@ -113,9 +113,9 @@ createfilesystems_ext4() {
   mkfs.fat -F 32 -n boot "${DISK}2"
 
   echo -e "mounting filesystems…"
-  mount /dev/disk/by-label/nixos /mnt
+  mount ${DISK}1 /mnt
   mkdir -p /mnt/boot
-  mount /dev/disk/by-label/boot /mnt/boot
+  mount ${DISK}2 /mnt/boot
 }
 
 
