@@ -8,14 +8,14 @@
   boot = {
     loader = {
       systemd-boot.enable = true;
-      systemd-boot.editor = false;
+      systemd-boot.editor = true;
       systemd-boot.graceful = true;
       efi.canTouchEfiVariables = true;
-      efi.efiSysMountPoint = "/boot/efi";
-      grub.enable = false;
-      grub.efiSupport = true;
-      grub.version = 2;
-      grub.device = "nodev";
+      #efi.efiSysMountPoint = "/boot/efi";
+      #grub.enable = false;
+      #grub.efiSupport = true;
+      #grub.version = 2;
+      #grub.device = "nodev";
     };
 
     kernelParams = [
