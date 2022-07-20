@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -p git     # @TODO: warum wird git nicht installiert?
+#!nix-shell -i bash -p git     # @TODO: warum wird git nicht installiert?
 
 set -euo pipefail
 
@@ -41,11 +41,10 @@ welcome() {
   echo -e "This script will bootstrap a new NixOS system from a given configuration. According to the options given, it will do the following:"
   echo -e ""
   echo -e "   * zapping the target disk ${RED}${DISK}${NORMAL}"
-  echo -e "   * creating 3 partitions (BIOS, EFI and system)"
+  echo -e "   * creating 2 partitions (EFI and system)"
   echo -e "   * formatting the partitions (ZFS for system partition)"
   echo -e "   * cloning configuration from git repository"
   echo -e "   * installing your static minimal configuration ${RED}/nixos/hosts/minimal${NORMAL}"
-  echo -e "   * rebooting into new system"
   echo -e ""
   echo -e "Are you OK with this? Press ENTER to going further or CTRL+C to abort."
   read -r _
