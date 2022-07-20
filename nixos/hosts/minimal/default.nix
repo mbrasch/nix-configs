@@ -23,6 +23,12 @@
       "console=tty1"
     ];
 
+    initrd = {
+      network.enable = true;
+      includeDefaultModules = true;
+      kernelModules = [];
+    };
+
     #kernelPackages = [
     #  pkgs.zfsUnstable.latestCompatibleLinuxPackages
     #];

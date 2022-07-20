@@ -55,31 +55,30 @@ welcome() {
 
 
 
-partitioning() {
+partitioning_via_sgdisk() {
   echo -e "zapping ${DISK}…"
   sgdisk --zap-all "${DISK}"
-  partprobe ${DISK}
+  #partprobe ${DISK}
 
-#   echo -e "creating BIOS partition…"
-#   sgdisk -a1 -n2:34:2047 -t2:EF02 ${DISK}
-#
-#   echo -e "creating EFI partition…"
-#   sgdisk -n3:1M:+512M -t3:EF00 "${DISK}"
-#
-#   # Main ZFS partition, using up the remaining space on the drive
-#   echo -e "creating ZFS partition…"
-#   sgdisk -n1:0:0 -t1:BF01 "${DISK}"
-#
-#   partprobe ${DISK}
+  #echo -e "creating BIOS partition…"
+  #sgdisk -a1 -n2:34:2047 -t2:EF02 ${DISK}
 
+  echo -e "creating EFI partition…"
+  sgdisk -n3:1M:+512M -t3:EF00 "${DISK}"
+
+  # Main ZFS partition, using up the remaining space on the drive
+  echo -e "creating ZFS partition…"
+  sgdisk -n1:0:0 -t1:BF01 "${DISK}"
+
+  #partprobe ${DISK}
+}
+
+partitioning_via_parted() {
   echo -e "creating GPT patition scheme…"
-  parted ${DISK} -- mklabel gpt              # gpt || msdos
+  parted ${DISK} -- mklabel gpt
 
   echo -e "creating root partition…"
-  parted ${DISK} -- mkpart primary 512MiB -4GiB
-
-  echo -e "creating swap partition…"
-  parted ${DISK} -- mkpart primary linux-swap -4GiB 100%
+  parted ${DISK} -- mkpart primary 512MiB 100$
 
   echo -e "creating EFI partition…"
   parted ${DISK} -- mkpart ESP fat32 1MiB 512MiB
@@ -87,33 +86,39 @@ partitioning() {
 }
 
 
-createfilesystems() {
-#   echo -e "creating zpool…"
-#   zpool create -O mountpoint=none -O atime=off -O compression=lz4 -O xattr=sa -O acltype=posixacl -o ashift=12 -R /mnt rpool "${DISK}${PARTPREFIX}1" -f
-#
-#   echo -e "creating filesystems…"
-#   zfs create -o mountpoint=none rpool/root
-#   zfs create -o mountpoint=legacy rpool/root/nixos
-#   zfs create -o mountpoint=legacy rpool/home
-#
-#   echo -e "mounting filesystems…"
-#   mount -t zfs rpool/root/nixos /mnt
-#   mkdir /mnt/home
-#   mount -t zfs rpool/home /mnt/home
-#
-#   echo -e "creating EFI filesystem…"
-#   mkfs.vfat "${DISK}${PARTPREFIX}3"
-#   mkdir /mnt/boot
-#   mount "${DISK}${PARTPREFIX}3" /mnt/boot
-  mkfs.ext4 -L nixos "${DISK}1"
-  mkswap -L swap "${DISK}2"
-  mkfs.fat -F 32 -n boot "${DISK}3"
 
+createfilesystems_zfs() {
+  echo -e "creating zpool…"
+  zpool create -O mountpoint=none -O atime=off -O compression=lz4 -O xattr=sa -O acltype=posixacl -o ashift=12 -R /mnt rpool "${DISK}${PARTPREFIX}1" -f
+
+  echo -e "creating filesystems…"
+  zfs create -o mountpoint=none rpool/root
+  zfs create -o mountpoint=legacy rpool/root/nixos
+  zfs create -o mountpoint=legacy rpool/home
+
+  echo -e "mounting filesystems…"
+  mount -t zfs rpool/root/nixos /mnt
+  mkdir /mnt/home
+  mount -t zfs rpool/home /mnt/home
+
+  echo -e "creating EFI filesystem…"
+  mkfs.vfat "${DISK}${PARTPREFIX}3"
+  mkdir /mnt/boot
+  mount "${DISK}${PARTPREFIX}3" /mnt/boot
+}
+
+createfilesystems_ext4() {
+  echo -e "creating filesystems…"
+  mkfs.ext4 -L nixos "${DISK}1"
+  mkfs.fat -F 32 -n boot "${DISK}2"
+
+  echo -e "mounting filesystems…"
   mount /dev/disk/by-label/nixos /mnt
   mkdir -p /mnt/boot
   mount /dev/disk/by-label/boot /mnt/boot
-  swapon "${DISK}2"
 }
+
+
 
 optstring="hd:"
 
@@ -131,8 +136,8 @@ done
 
 
 welcome
-partitioning
-createfilesystems
+partitioning_via_parted
+createfilesystems_ext4
 
 echo -e "Cloning configuration from git…"
 git clone https://github.com/mbrasch/nix-configs.git
@@ -146,4 +151,4 @@ cp -f nix-configs/nixos/hosts/minimal/default.nix /mnt/etc/nixos/configuration.n
 echo -e "Installing NixOS…"
 nixos-install --no-root-passwd
 
-echo -e "Installer completed. You can now reboot your machine."
+echo -e "Installer completed. You can now reboot your machine or check the configuration."
