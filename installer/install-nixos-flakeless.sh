@@ -136,7 +136,7 @@ done
 
 
 welcome
-partitioning_via_gsdisk
+partitioning_via_sgdisk
 createfilesystems_zfs
 
 echo -e "Cloning configuration from git…"
