@@ -56,8 +56,9 @@ welcome() {
 
 
 partitioning() {
-  echo -e "zapping…"
+  echo -e "zapping ${DISK}…"
   sgdisk --zap-all "${DISK}"
+  partprobe ${DISK}
 
 #   echo -e "creating BIOS partition…"
 #   sgdisk -a1 -n2:34:2047 -t2:EF02 ${DISK}

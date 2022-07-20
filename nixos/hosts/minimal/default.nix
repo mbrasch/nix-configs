@@ -8,6 +8,8 @@
   boot = {
     loader = {
       systemd-boot.enable = true;
+      systemd-boot.editor = false;
+      systemd-boot.graceful = true;
       efi.canTouchEfiVariables = true;
       efi.efiSysMountPoint = "/boot/efi";
       grub.enable = false;
@@ -137,7 +139,7 @@
         enable = true;
         #extraConfig = {   };
         highlightStyle = "fg=cyan";
-        strategy = [ "completion" ]; # history | completion | match_prev_cmd
+        #strategy = [ "completion" ]; # history | completion | match_prev_cmd
       };
 
       syntaxHighlighting = {
