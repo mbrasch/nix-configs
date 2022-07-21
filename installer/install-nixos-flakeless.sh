@@ -3,25 +3,25 @@
 
 set -euo pipefail
 
+if [ ! -d "/etc/nixos" ] || [ ! -d "/iso/isolinux/" ]; then
+  echo -e "This script can only run from NixOS installer media."; exit 1;
+fi
+
+
+DISK="/dev/vda"      # target device
+FILESYSTEM="ext4"    # @TODO: target filesystem: ext4 || zfs
+OUTPUT=""            # @TODO: output derivation (flakes)
+
+RED='\033[1;31m'
+NORMAL='\033[0;39m'
+
+
 #echo -e "Changing nix-channel to nixos-unstable…"
 #nix-channel --add https://nixos.org/channels/nixos-unstable nixos
 #nix-channel --update
 
 echo -e "Installing some requirements…"
 nix-env -iA nixos.git
-
-
-if [ ! -d "/etc/nixos" ] || [ ! -d "/iso/isolinux/" ]; then
-  echo -e "This script can only run from NixOS installer media."; exit 1;
-fi
-
-
-DISK="/dev/sda"      # target device
-FILESYSTEM="ext4"    # @TODO: target filesystem: ext4 || zfs
-OUTPUT=""            # @TODO: output derivation (flakes)
-
-RED='\033[1;31m'
-NORMAL='\033[0;39m'
 
 
 
