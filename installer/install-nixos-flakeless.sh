@@ -16,8 +16,9 @@ if [ ! -d "/etc/nixos" ] || [ ! -d "/iso/isolinux/" ]; then
 fi
 
 
-DISK="/dev/sda"
-OUTPUT=""
+DISK="/dev/sda"      # target device
+FILESYSTEM="ext4"    # @TODO: target filesystem: ext4 || zfs
+OUTPUT=""            # @TODO: output derivation (flakes)
 
 RED='\033[1;31m'
 NORMAL='\033[0;39m'

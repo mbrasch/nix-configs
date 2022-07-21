@@ -45,9 +45,7 @@
     hostId = "4a1a5ffb";
     interfaces.enp1s0.useDHCP = true;
     interfaces.enp1s0.wakeOnLan.enable = true;
-    interfaces.enp2s0.useDHCP = true;
-    interfaces.enp3s0.useDHCP = true;
-    interfaces.enp4s0.useDHCP = true;
+
 
     firewall = {
       enable = false;
