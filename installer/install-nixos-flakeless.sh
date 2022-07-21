@@ -95,9 +95,11 @@ createfilesystems_zfs() {
 
 
 createfilesystems_ext4() {
+  echo -e "creating filesystems…"
   mkfs.ext4 -L nixos ${DISK}1
   mkfs.fat -F 32 -n boot ${DISK}2
 
+  echo -e "mounting filesystems…"
   mount ${DISK}1 /mnt
   mkdir -p /mnt/boot
   mount ${DISK}2 /mnt/boot
