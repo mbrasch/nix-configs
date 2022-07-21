@@ -128,7 +128,7 @@ createfilesystems_ext4
 echo -e "Cloning configuration from git…"
 git clone https://github.com/mbrasch/nix-configs.git
 
-echo -e "Generating config…"
+echo -e "Generating hardware config…"
 nixos-generate-config --root /mnt
 
 echo -e "Copying minimal config to /mnt/etc/nixos/ …"
