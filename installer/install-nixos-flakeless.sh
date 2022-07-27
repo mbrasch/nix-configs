@@ -49,7 +49,7 @@ welcome() {
   echo -e ""
   echo -e "   * zapping the target disk ${RED}${DISK}${NORMAL}"
   echo -e "   * creating 2 partitions (EFI and system)"
-  echo -e "   * formatting the partitions (ZFS for system partition)"
+  echo -e "   * formatting the partitions (${RED}${FILESYSTEM}${NORMAL} for system partition)"
   echo -e "   * cloning configuration from git repository"
   echo -e "   * installing your static minimal configuration ${RED}/nixos/hosts/minimal${NORMAL}"
   echo -e ""
@@ -138,5 +138,11 @@ cp -f nix-configs/nixos/hosts/minimal/default.nix /mnt/etc/nixos/configuration.n
 
 echo -e "Installing NixOS…"
 nixos-install --no-root-passwd
+
+# IMPORTANT: or else when you reboot into your new system, zfs will fail to import the zpool.
+if [ "${FILESYSTEM}" == "zfs" ]; then
+  echo -e "Exporting ZFS pool…"
+  zpool export rpool
+fi
 
 echo -e "Installer completed. You can now reboot your machine or check the configuration."

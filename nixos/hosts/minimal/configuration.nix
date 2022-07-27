@@ -11,11 +11,6 @@
       systemd-boot.editor = true;
       systemd-boot.graceful = true;
       efi.canTouchEfiVariables = true;
-      #efi.efiSysMountPoint = "/boot/efi";
-      #grub.enable = false;
-      #grub.efiSupport = true;
-      #grub.version = 2;
-      #grub.device = "nodev";
     };
 
     kernelParams = [
@@ -37,15 +32,11 @@
 
 
   ##############################################################################################################################
-  ##############################################################################################################################
-  ##############################################################################################################################
+  ## Network
 
   networking = {
     hostName = "minimal";
     hostId = "4a1a5ffb";
-    interfaces.enp1s0.useDHCP = true;
-    interfaces.enp1s0.wakeOnLan.enable = true;
-
 
     firewall = {
       enable = false;
@@ -55,10 +46,8 @@
   };
 
   ##############################################################################################################################
-  ##############################################################################################################################
-  ##############################################################################################################################
+  ## Locale
 
-  # Select internationalisation properties.
   time.timeZone = "Europe/Berlin";
   i18n.defaultLocale = "de_DE.UTF-8";
   console = {
@@ -67,8 +56,16 @@
   };
 
   ##############################################################################################################################
+  ## Desktop
+
+  services.xserver.enable = true;
+  services.xserver.layout = "de";
+  services.xserver.xkbOptions = "eurosign:e";
+  services.xserver.displayManager.sddm.enable = true;
+  services.xserver.desktopManager.plasma5.enable = true;
+
   ##############################################################################################################################
-  ##############################################################################################################################
+  ## Users
 
   # generate hashed passwords via: mkpasswd -m sha-512
 
@@ -101,8 +98,7 @@
   };
 
   ##############################################################################################################################
-  ##############################################################################################################################
-  ##############################################################################################################################
+  ## System packages
 
   environment.systemPackages = with pkgs; [
     nixos-shell
@@ -124,8 +120,7 @@
   ];
 
   ##############################################################################################################################
-  ##############################################################################################################################
-  ##############################################################################################################################
+  ## Program configurations
 
   programs = {
     zsh = {
@@ -200,8 +195,7 @@
   };
 
   ##############################################################################################################################
-  ##############################################################################################################################
-  ##############################################################################################################################
+  ## Service configurations
 
   services = {
     xrdp = {
@@ -219,8 +213,7 @@
 
 
   ##############################################################################################################################
-  ##############################################################################################################################
-  ##############################################################################################################################
+  ## System
 
   system = {
     stateVersion = "22.05"; # Did you read the comment?
@@ -230,8 +223,7 @@
   };
 
   ##############################################################################################################################
-  ##############################################################################################################################
-  ##############################################################################################################################
+  ## nixpkgs
 
   nixpkgs = {
     config = {
@@ -246,19 +238,22 @@
   };
 
   ##############################################################################################################################
-  ##############################################################################################################################
-  ##############################################################################################################################
+  ## Nix
 
   nix = {
-    allowedUsers = [ "admin" ];
-    trustedUsers = [ "root" "@wheel" ];
-    autoOptimiseStore = true;
-    requireSignedBinaryCaches = true; # RECOMMENDED!!!
-    trustedBinaryCaches = [ ]; # List of binary cache URLs that non-root users can use (in addition to those specified using nix.binaryCaches)
-    #binaryCachePublicKeys = [   ];
-    #binaryCaches = [   ];
-    buildCores = 0; # 0 = use all cores
-    maxJobs = "auto"; # auto = use all logical cores
+    settings = {
+      sandbox = true;               # If set, Nix will perform builds in a sandboxed environment that it will set up automatically for each build.
+      extra-sandbox-paths = [ ];    # Directories from the host filesystem to be included in the sandbox.
+      allowed-users = [ "admin" ];
+      trusted-users = [ "root" "@wheel" ];
+      trusted-substituters = [ ];   # List of binary cache URLs that non-root users can use (in addition to those specified using nix.binaryCaches)
+      require-sigs = true;          # RECOMMENDED!!!
+      max-jobs = "auto";            # auto = use all logical cores
+      cores = 0;                    # 0 = use all cores
+      auto-optimise-store = true;
+    };
+
+
     nrBuildUsers = 32;
 
     distributedBuilds = false;
@@ -266,10 +261,6 @@
 
     checkConfig = true;
     daemonIOSchedPriority = 0; # 0 = normal, 7 = lowest
-    #daemonNiceLevel = 0;		# 0 = normal, 19 = lowest
-    #envVars = {   };
-
-    #package = pkgs.nixFlakes;
 
     extraOptions = ''
       experimental-features = nix-command flakes
@@ -295,21 +286,16 @@
 
     readOnlyStore = true; # RECOMMENDED!!!
     registry = { }; # A system-wide flake registry.
-    sandboxPaths = [ ]; # Directories from the host filesystem to be included in the sandbox.
 
     sshServe = {
       enable = false; # Whether to enable serving the Nix store as a remote store via SSH.
       keys = [ ];
       protocol = "ssh"; # The specific Nix-over-SSH protocol to use: ssh | ssh-ng
     };
-
-    #systemFeatures = [   ];		# The supported features of a machine.
-    useSandbox = true; # If set, Nix will perform builds in a sandboxed environment that it will set up automatically for each build.
   };
 
   ##############################################################################################################################
-  ##############################################################################################################################
-  ##############################################################################################################################
+  ## Foo
 
   documentation = {
     enable = true;
